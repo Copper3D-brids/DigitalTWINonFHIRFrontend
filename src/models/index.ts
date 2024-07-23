@@ -1,6 +1,6 @@
 export interface IRequests {
-    url: string;
-    params: any;
+    url: string,
+    params: any,
 }
 
 export interface IIdentifier {

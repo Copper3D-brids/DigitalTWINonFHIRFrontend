@@ -8,7 +8,11 @@ import {
     GameControllerOutline as GameControllerIcon,
     ExtensionPuzzleOutline as ExtensionPuzzleIcon,
     RocketOutline as RocketIcon,
-    LibraryOutline as LibraryIcon
+    LibraryOutline as LibraryIcon,
+    FolderOutline as FolderIcon,
+    FolderOpenOutline as FolderOpenIcon,
+    DocumentOutline as DocumentIcon,
+    GridOutline as GridIcon
   } from '@vicons/ionicons5';
 
 export function useIcons(){
@@ -22,6 +26,10 @@ export function useIcons(){
         LaptopIcon, 
         LibraryIcon,
         GameControllerIcon, 
-        ExtensionPuzzleIcon
+        ExtensionPuzzleIcon,
+        FolderIcon,
+        FolderOpenIcon,
+        DocumentIcon,
+        GridIcon
     }
 }

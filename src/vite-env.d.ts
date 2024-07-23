@@ -8,3 +8,15 @@ declare module "*.vue" {
   }
   
 declare module '@vicons/ionicons5';
+
+interface Window {
+  showDirectoryPicker?: () => Promise<any>;
+}
+
+// interface FileSystemDirectoryHandle {
+//   children: Array<FileSystemDirectoryHandle | FileSystemFileHandle>;
+// }
+
+interface CustomFileSystemDirectoryHandle extends FileSystemDirectoryHandle {
+  children: Array<CustomFileSystemDirectoryHandle | FileSystemFileHandle>;
+}

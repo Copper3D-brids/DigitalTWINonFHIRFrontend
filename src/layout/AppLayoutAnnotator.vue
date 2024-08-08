@@ -30,7 +30,7 @@ import { NLayout,  NLayoutFooter, NLayoutHeader} from 'naive-ui';
 import AppLayoutSider from "@/layout/AppLayoutSider.vue";
 import {useFolderPickerStore} from "@/components/composables/folderpicker";
 import { storeToRefs } from "pinia";
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useIcons } from '@/layout/composables/icons';
 
@@ -43,6 +43,11 @@ const {root} = storeToRefs(useFolderPickerStore());
 const menuOptions = ref<any[]>([{
   label: () => generateRouterLabel("home-fhir", "Home")
 }]) 
+
+onMounted(()=>{
+  console.log("mounted:", root);
+  
+})
 
 const generateLable = (name:string) => {
   switch (name) {
@@ -98,6 +103,8 @@ const generate = (children:Array<CustomFileSystemDirectoryHandle | FileSystemFil
 }
 
 watch(root, () => {
+  console.log("watch: ", root);
+  
   if(!!root && root.value?.children){
     
     menuOptions.value = [{

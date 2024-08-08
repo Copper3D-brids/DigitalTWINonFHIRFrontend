@@ -20,3 +20,7 @@ interface Window {
 interface CustomFileSystemDirectoryHandle extends FileSystemDirectoryHandle {
   children: Array<CustomFileSystemDirectoryHandle | FileSystemFileHandle>;
 }
+
+interface ImportMeta {
+  env: Record<string, string>
+}

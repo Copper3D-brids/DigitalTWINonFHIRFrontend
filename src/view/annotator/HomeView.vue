@@ -7,17 +7,11 @@
 <script setup lang="ts">
 import DropZone from "@/components/DropZone.vue"
 import {ref} from "vue";
-// import { useFolderPickerStore} from "@/components/composables/folderpicker";
-// import { storeToRefs } from "pinia";
 
 const rootDir = ref<CustomFileSystemDirectoryHandle>()
 
 const handleOnchange = (root:CustomFileSystemDirectoryHandle)=>{
-    rootDir.value = root
-    // for (let c of root.children){
-    //     console.log(c.kind, c.name);
-    // }
-    
+    rootDir.value = root;
 }
 
 </script>

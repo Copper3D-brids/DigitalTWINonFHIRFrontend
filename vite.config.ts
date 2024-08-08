@@ -5,6 +5,7 @@ import { fileURLToPath, URL } from 'url';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // base: import.meta.env.BASE_URL || '/app',
   plugins: [vue(), VitePWA({
     registerType: 'prompt',
     injectRegister: false,

@@ -1,98 +1,84 @@
 <template>
-   <n-page-header subtitle="A podcast to improve designs" class="page-header-bg">
-    <n-grid :cols="5">
-      <n-gi>
-        <n-statistic label="Episodes" value="125" />
-      </n-gi>
-      <n-gi>
-        <n-statistic label="Guests" value="22" />
-      </n-gi>
-      <n-gi>
-        <n-statistic label="Apologies" value="36" />
-      </n-gi>
-      <n-gi>
-        <n-statistic label="Topics" value="83" />
-      </n-gi>
-      <n-gi>
-        <n-statistic label="Reference Links" value="2,346" />
-      </n-gi>
-    </n-grid>
-    <template #title>
-      <a
-        href="https://anyway.fm/"
-        style="text-decoration: none; color: inherit"
-      >
-        Anyway.FM
-      </a>
-    </template>
-    <template #header>
-      <n-breadcrumb>
-        <n-breadcrumb-item v-for="(name, i) in breadcrumbs" :key="i" href="/fhir">{{ name }}</n-breadcrumb-item>
-      </n-breadcrumb>
-    </template>
-    <template #avatar>
-      <n-avatar
-        src="https://cdnimg103.lizhi.fm/user/2017/02/04/2583325032200238082_160x160.jpg"
-      />
-    </template>
-    <template #extra>
-      <n-space>
-        <n-button>Refresh</n-button>
-        <n-dropdown :options="options" placement="bottom-start">
-          <n-button :bordered="false" style="padding: 0 4px">
-            ···
-          </n-button>
-        </n-dropdown>
+   <PageSummary :breadcrumbs="breadcrumbs" :avatar="logo" title="Subjects" subtitle="Add clinic descriptions for patients" footer="© 2024 Clinic Description Annotator">
+      <n-statistic label="Number of patients" :value="patientsDirectoryHandle?.children.length" />
+      <n-statistic label="Number of samples" :value="samples" />
+      <n-statistic label="Number of dicoms" :value="dicoms" />
+      <template #extra>
+        <n-space>
+        <n-button strong ghost class="w-[100px]" :color="annotator==='Annotate'?'#ff69b4':'#22c55e'" @click="onHandleAnnotator">{{ annotator }}</n-button>
       </n-space>
-    </template>
-    <template #footer>
-      As of April 3, 2021
-    </template>
-  </n-page-header>
+      </template>
+   </PageSummary>
+
+   <div v-show="annotator==='Annotate'? false : true">
+    <div class="p-3 m-3">
+      <n-h3>Select Patients:</n-h3>
+      <n-checkbox-group v-model:value="patients"  class="flex flex-row flex-wrap justify-around w-full">
+            <n-checkbox v-for="p, i in patientsDirectoryHandle?.children" :key="i" :value="p.name" :label="p.name" size="large" class="checkbox-item"/>
+      </n-checkbox-group>
+      <n-divider />
+    </div>
+   </div>
+
+   <div>
+    <div class="p-3 m-3">
+      <n-h3>Measurements:</n-h3>
+      <pre>{{ JSON.stringify(descriptions, null, 2) }}</pre>
+    </div>
+   </div>
+   
+    
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useRoute } from 'vue-router';
-import { useMessage, NGrid, NBreadcrumb, NButton, NSpace, NDropdown, NBreadcrumbItem, NStatistic, NGi, NPageHeader, NAvatar } from 'naive-ui';
+import PageSummary from "@/components/PageSummary.vue";
+import { NStatistic, NButton, NSpace, NCheckbox, NCheckboxGroup, NH3, NDivider} from 'naive-ui';
 import {useFolderPickerStore} from "@/components/composables/folderpicker";
 import { storeToRefs } from "pinia";
+import logo from "@/assets/images/2.png";
 
 const { root } = storeToRefs(useFolderPickerStore());
 
 const route = useRoute();
 
 const filename = ref(route.query.name);
+const breadcrumbs = [root.value?.name, filename.value] as Array<string>;
+const patientsDirectoryHandle = ref<CustomFileSystemDirectoryHandle>();
+const samples = ref(0);
+const dicoms = ref(0);
+const annotator = ref("Annotate");
+const patients = ref(null);
+const descriptions= ref({dataset:{id: "", uuid: "", name: root.value?.name, path: "/"}, patients:[]})
 
-const message = useMessage();
-
-const breadcrumbs = [root.value?.name, filename]
-
-const options = [
-        {
-          label: 'More episodes',
-          key: '1'
-        },
-        {
-          label: 'More episodes',
-          key: '2'
-        },
-        {
-          label: 'More episodes',
-          key: '3'
-        }
-]
+const onHandleAnnotator = () => {
+  annotator.value === "Annotate" ? annotator.value = "Submit" : annotator.value = "Annotate";
+}
 
 onMounted(()=>{
-  console.log(root);
-  
+  patientsDirectoryHandle.value = root.value?.children.filter((item: any) => item.name === filename.value)[0] as CustomFileSystemDirectoryHandle;
+  patientsDirectoryHandle.value.children.forEach((item: CustomFileSystemDirectoryHandle | FileSystemFileHandle) => {
+    if(item.kind === "directory"){
+      samples.value += item.children.length;
+      item.children.forEach((sample: CustomFileSystemDirectoryHandle | FileSystemFileHandle) =>{
+        if (sample.kind === "directory"){
+            sample.children.forEach((dcm) => {
+            if(dcm.kind === "file" && dcm.name.endsWith(".dcm")){
+              dicoms.value += 1;
+            }
+          })  
+        }
+      })
+    }
+  }) 
 })
 
 </script>
 
 <style scoped>
-.page-header-bg {
-  @apply p-3 m-3 bg-zinc-100 rounded shadow-md
+.checkbox-item{
+  @apply flex justify-center items-center w-32 h-10 m-2 rounded-lg border-dotted border-2 border-pink-200 bg-pink-100 shadow-lg shadow-pink-300/50
 }
 
 </style>

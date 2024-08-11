@@ -11,7 +11,7 @@
             <label for="c_card_slide_3" class="c_card_slide c_card_slide-3"></label>
         </div>
 
-        <n-flex  align="center" v-for="(d, i) in props.data" class="c_card_detail" :key="i" :class="'c_card_detail-'+ (i+1)"> 
+        <n-flex align="center" v-for="(d, i) in props.data" class="c_card_detail" :key="i" :class="'c_card_detail-'+ (i+1)"> 
            
             <div class="c_card_img">
                 <img :src="d.icon" alt="none"/>

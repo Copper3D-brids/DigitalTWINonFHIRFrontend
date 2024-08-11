@@ -6,6 +6,7 @@ import Patients from "@/view/fhir/measurements/Patients.vue";
 import AppLayoutAnnotator from "@/layout/AppLayoutAnnotator.vue";
 import HomeViewAnnotator from "@/view/annotator/HomeView.vue";
 import PrimaryView from "@/view/annotator/measurements/PrimaryView.vue";
+import testaaa from "@/view/annotator/measurements/testaaa.vue";
 import Apptest from "@/layout/Apptest.vue";
 
 const router = createRouter({
@@ -31,10 +32,9 @@ const router = createRouter({
                     component: PrimaryView
                 },
                 {
-                    // path:"/annotator/:name",
-                    path:"/annotator/test",
-                    name:"annotator",
-                    component: PrimaryView
+                    path:"/primary/test",
+                    name:"annotatortest",
+                    component: testaaa
                 }
             ]
         },

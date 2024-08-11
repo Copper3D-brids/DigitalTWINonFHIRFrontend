@@ -1,11 +1,11 @@
 <template>
-    <div class="text-3xl font-bold underline">
-        sda
+    <div>
+        test
+        {{ root }}
     </div>
 </template>
 
 <script setup lang="ts">
-
 import {useFolderPickerStore} from "@/components/composables/folderpicker";
 import { storeToRefs } from "pinia";
 

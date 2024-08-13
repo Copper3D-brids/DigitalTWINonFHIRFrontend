@@ -1,5 +1,5 @@
 <template>
-   <PageSummary :breadcrumbs="breadcrumbs" :avatar="logo" title="Subjects" subtitle="Add clinic descriptions for patients" footer="© 2024 Clinic Description Annotator">
+   <PageSummary :breadcrumbs="breadcrumbs" :avatar="logo" title="Annotator" subtitle="Add clinic descriptions for patients" footer="© 2024 Clinic Description Annotator">
       <n-statistic label="Number of patients" :value="patientsDirectoryHandle?.children.length" />
       <n-statistic label="Number of samples" :value="samples" />
       <n-statistic label="Number of dicoms" :value="dicoms" />
@@ -13,11 +13,26 @@
    <div v-show="annotator==='Annotate'? false : true">
     <div class="p-3 m-3">
       <n-h3>Select Patients:</n-h3>
-      <n-checkbox-group v-model:value="patients"  class="flex flex-row flex-wrap justify-around w-full">
+      <n-checkbox-group v-model:value="patients"  class="flex flex-row flex-wrap justify-start w-full">
             <n-checkbox v-for="p, i in patientsDirectoryHandle?.children" :key="i" :value="p.name" :label="p.name" size="large" class="checkbox-item"/>
       </n-checkbox-group>
       <n-divider />
     </div>
+   </div>
+   
+   <div v-show="patients.length > 0 && annotator!=='Annotate'? true: false"> 
+    <div class="p-3 m-3">
+      <FormTab>
+        <template #observation>
+          <n-h6>Add Observations for selected patients:</n-h6>
+          <FormObservation :oid="'1'" :belongTo="patients"  @updateObservation="updateObservations"/>
+        </template>
+        <template #imagingstudy>
+          <n-h6>Generating ImagingStudy for selected patients:</n-h6>
+        </template>
+      </FormTab>
+      <n-divider />
+    </div>  
    </div>
 
    <div>
@@ -31,13 +46,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, onMounted } from "vue";
 import { useRoute } from 'vue-router';
 import PageSummary from "@/components/PageSummary.vue";
-import { NStatistic, NButton, NSpace, NCheckbox, NCheckboxGroup, NH3, NDivider} from 'naive-ui';
+import FormTab from "../components/FormTab.vue";
+import FormObservation from "../components/FormObservation.vue";
+import { NStatistic, NButton, NSpace, NCheckbox, NCheckboxGroup, NH3, NH6, NDivider} from 'naive-ui';
 import {useFolderPickerStore} from "@/components/composables/folderpicker";
 import { storeToRefs } from "pinia";
-import logo from "@/assets/images/2.png";
+import { IAnnotatorDescription, IFormObservation, IAnnotatorFormDescription} from "@/models";
+import logo from "@/assets/images/3.png";
+
 
 const { root } = storeToRefs(useFolderPickerStore());
 
@@ -49,8 +68,9 @@ const patientsDirectoryHandle = ref<CustomFileSystemDirectoryHandle>();
 const samples = ref(0);
 const dicoms = ref(0);
 const annotator = ref("Annotate");
-const patients = ref(null);
-const descriptions= ref({dataset:{id: "", uuid: "", name: root.value?.name, path: "/"}, patients:[]})
+const patients = ref([]);
+const formDescription = ref<IAnnotatorFormDescription>({dataset:{id: "", uuid: "", name: root.value?.name!, path: "/"}, patients:[]})
+const descriptions= ref<IAnnotatorDescription>({dataset:{id: "", uuid: "", name: root.value?.name!, path: "/"}, patients:[]})
 
 const onHandleAnnotator = () => {
   annotator.value === "Annotate" ? annotator.value = "Submit" : annotator.value = "Annotate";
@@ -61,6 +81,8 @@ onMounted(()=>{
   patientsDirectoryHandle.value.children.forEach((item: CustomFileSystemDirectoryHandle | FileSystemFileHandle) => {
     if(item.kind === "directory"){
       samples.value += item.children.length;
+      descriptions.value.patients.push({id: "", uuid: "", name: item.name, path: root.value?.name + "/" + item.name, observations: [], imagingStudy: null})
+      formDescription.value.patients.push({id: "", uuid: "", name: item.name, path: root.value?.name + "/" + item.name, observations: [], imagingStudy: null})
       item.children.forEach((sample: CustomFileSystemDirectoryHandle | FileSystemFileHandle) =>{
         if (sample.kind === "directory"){
             sample.children.forEach((dcm) => {
@@ -74,11 +96,16 @@ onMounted(()=>{
   }) 
 })
 
+const updateObservations = (observation: IFormObservation) => {
+  console.log(observation);
+  
+}
+
 </script>
 
 <style scoped>
 .checkbox-item{
-  @apply flex justify-center items-center w-32 h-10 m-2 rounded-lg border-dotted border-2 border-pink-200 bg-pink-100 shadow-lg shadow-pink-300/50
+  @apply flex justify-center items-center w-32 h-10 m-2 rounded-lg border-dotted border-2 border-orange-200 bg-orange-100 shadow-lg shadow-orange-300/50
 }
 
 </style>

@@ -29,3 +29,85 @@ export interface IPatient {
     name: IHumanName[] | null;
     [key:string]: any;
 }
+
+
+export interface IAnnotatorObervation {
+    value: string;
+    code: string;
+    units: string;
+    codeSystem: string;
+    unitsSystem: string;
+    [key:string]: any;
+}
+
+export interface IAnnotatorImagingStudySeriesInstance {
+    uid: string;
+    sopClassUid: string;
+    sopClassName: string;
+    number: number;
+    [key:string]: any;
+}
+
+export interface IAnnotatorImagingStudySeries {
+    uid: string;
+    endpointUrl: string;
+    numberOfInstances: number;
+    bodySite?: {
+        system: string;
+        code: string;
+        display: string;
+    };
+    instance: Array<IAnnotatorImagingStudySeriesInstance>;
+}
+
+export interface IAnnotatorImagingStudy {
+    path: string;
+    endpointUrl: string;
+    series: Array<IAnnotatorImagingStudySeries>;
+    [key:string]: any;
+}
+  
+export interface IAnnotatorPatient {
+    id: string;
+    uuid: string;
+    name: string;
+    path: string;
+    observations: Array<IAnnotatorObervation>;
+    imagingStudy: IAnnotatorImagingStudy|null;
+}
+
+export interface IAnnotatorDescription {
+    dataset: {
+        id: string;
+        uuid: string;
+        name: string;
+        path: string;
+    },
+    patients: Array<IAnnotatorPatient>;
+}
+
+export interface IFormObservation {
+        oid: string,
+        operation: 'add' | 'remove',
+        belongTo: Array<String>,
+        observation: IAnnotatorObervation,
+}
+
+export interface IAnnotatorFormPatient {
+    id: string;
+    uuid: string;
+    name: string;
+    path: string;
+    observations: Array<IFormObservation>;
+    imagingStudy: IAnnotatorImagingStudy|null;
+}
+
+export interface IAnnotatorFormDescription {
+    dataset: {
+        id: string;
+        uuid: string;
+        name: string;
+        path: string;
+    },
+    patients: Array<IAnnotatorFormPatient>;
+}

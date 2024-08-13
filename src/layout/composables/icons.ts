@@ -12,7 +12,10 @@ import {
     FolderOutline as FolderIcon,
     FolderOpenOutline as FolderOpenIcon,
     DocumentOutline as DocumentIcon,
-    GridOutline as GridIcon
+    GridOutline as GridIcon,
+    AddOutline as AddIcon,
+    CloseOutline as CloseIcon,
+    RemoveOutline as RemoveIcon,
   } from '@vicons/ionicons5';
 
 export function useIcons(){
@@ -30,6 +33,9 @@ export function useIcons(){
         FolderIcon,
         FolderOpenIcon,
         DocumentIcon,
-        GridIcon
+        GridIcon,
+        AddIcon,
+        CloseIcon,
+        RemoveIcon
     }
 }

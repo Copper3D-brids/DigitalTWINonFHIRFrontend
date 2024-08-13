@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMessage, NGrid, NBreadcrumb, NBreadcrumbItem, NStatistic, NGi, NPageHeader, NAvatar } from 'naive-ui';
+import { useMessage, NBreadcrumb, NBreadcrumbItem, NPageHeader, NAvatar } from 'naive-ui';
 
 const props = defineProps({
     breadcrumbs: Array<string>,

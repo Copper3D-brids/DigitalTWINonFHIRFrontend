@@ -4,8 +4,6 @@ import { defineStore } from "pinia";
 
 export const useFolderPickerStore = defineStore("folderPicker", () => { 
     const {root, folderPicker, folderDrop} = useFolderPicker();
-    console.log("call pick", root.value);
-    
     return {root, folderPicker, folderDrop}
 });
 export function useFolderPicker(){

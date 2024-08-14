@@ -45,7 +45,7 @@ const menuOptions = ref<any[]>([{
 }]) 
 
 onMounted(()=>{
-  console.log("mounted:", root);
+  // console.log("mounted:", root);
   
 })
 
@@ -103,7 +103,6 @@ const generate = (children:Array<CustomFileSystemDirectoryHandle | FileSystemFil
 }
 
 watch(root, () => {
-  console.log("watch: ", root);
   
   if(!!root && root.value?.children){
     

@@ -34,7 +34,8 @@
       <FormTab>
         <template #observation>
           <n-h6>Add Observations for selected patients:</n-h6>
-          <Observation :patients="patients" :formDescription="formDescription" @updateObservation="updateObservations"/>
+          <FormObservation v-if="destroy" v-for="d in uniqueDisplayObservations" :key="uuidv4()" :belongTo="patients" :filledData="JSON.parse(d)" disabled  @updateObservation="updateObservations" />
+          <FormObservation :belongTo="patients"  @updateObservation="updateObservations"/>
         </template>
         <template #imagingstudy>
           <n-h6>Generating ImagingStudy for selected patients:</n-h6>
@@ -55,12 +56,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch} from "vue";
-
+import { ref, onMounted, watch, computed} from "vue";
+import { v4 as uuidv4 } from 'uuid';
 import { useRoute } from 'vue-router';
 import PageSummary from "@/components/PageSummary.vue";
 import FormTab from "../components/FormTab.vue";
-import Observation from "../components/Observation.vue";
+import FormObservation from "../components/FormObservation.vue";
 import { NStatistic, NButton, NSpace, NCheckbox, NCheckboxGroup, NH3, NH6, NDivider, NSwitch} from 'naive-ui';
 import {useFolderPickerStore} from "@/components/composables/folderpicker";
 import { storeToRefs } from "pinia";
@@ -79,10 +80,10 @@ const samples = ref(0);
 const dicoms = ref(0);
 const annotator = ref("Annotate");
 const patients = ref<Array<string>>([]);
-
+const displayObservations = ref<Array<string>>([])
 const formDescription = ref<IAnnotatorFormDescription>({dataset:{id: "", uuid: "", name: root.value?.name!, path: "/"}, patients:[]})
 const descriptions= ref<IAnnotatorDescription>({dataset:{id: "", uuid: "", name: root.value?.name!, path: "/"}, patients:[]})
-
+const destroy = ref(true);
 const activeSwitch = ref(false);
 
 const onHandleAnnotator = () => {
@@ -114,27 +115,56 @@ watch(patients, (newVal) => {
     if (newVal.length === formDescription.value.patients.length){
       activeSwitch.value = true;
     }
+    generateDisplayObservations();
   }else{
     activeSwitch.value = false;
   }
 })
 
+const uniqueDisplayObservations = computed(() => [...new Set(displayObservations.value)]);
 
-// @ts-ignore
 const updateObservations = (data: IFormObservation) => {
-  // if(data.operation === "add"){
-  //     data.belongTo.forEach((p) => {
-  //     const index = formDescription.value.patients.findIndex((item) => item.name === p);
-  //     formDescription.value.patients[index].observations.push(data);
-  //   })
-  // }else if (data.operation === "remove"){
-  //   data.belongTo.forEach((p) => {
-  //     const index = formDescription.value.patients.findIndex((item) => item.name === p);
-  //     formDescription.value.patients[index].observations = formDescription.value.patients[index].observations.filter((o) => JSON.stringify(o.observation) !== JSON.stringify(data.observation));
-  //   })
-  // }
-  
+  if(data.operation === "add"){
+      data.belongTo.forEach((p) => {
+      const index = formDescription.value.patients.findIndex((item) => item.name === p);
+      formDescription.value.patients[index].observations.push(data);
+    })
+  }else if (data.operation === "remove"){
+    data.belongTo.forEach((p) => {
+      const index = formDescription.value.patients.findIndex((item) => item.name === p);
+      formDescription.value.patients[index].observations = formDescription.value.patients[index].observations.filter((o) => JSON.stringify(o.observation) !== JSON.stringify(data.observation));
+    })
+  }
+  generateDisplayObservations();
   updateDescriptionsObservations();
+}
+
+const generateDisplayObservations = () => {
+  destroy.value = false;
+  displayObservations.value = [];
+  if (patients.value.length === 1){
+    formDescription.value.patients.forEach((p) => {
+      if(patients.value.includes(p.name)){
+        p.observations.forEach((o) => {
+          displayObservations.value.push(JSON.stringify(o.observation));
+        })
+      }
+    })
+  } else if(patients.value.length > 1){
+    let arrays:Array<Array<IFormObservation>> = [];
+    formDescription.value.patients.forEach((p) => {
+      if(patients.value.includes(p.name)){
+        arrays.push(p.observations);
+      }
+    })
+    displayObservations.value = arrays.reduce((accumulator, currentValue) => {
+      return accumulator.filter((o) => currentValue.map((c) => JSON.stringify(c.observation)).includes(JSON.stringify(o.observation)));
+    }).map((o) => JSON.stringify(o.observation));
+  }
+  else{
+    displayObservations.value = [];
+  }
+  destroy.value = true;
 }
 
 const updateDescriptionsObservations = () => {

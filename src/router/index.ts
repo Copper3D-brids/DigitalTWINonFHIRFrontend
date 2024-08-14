@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory, createWebHashHistory} from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import HomeView from "../view/fhir/HomeView.vue";
 import AppLayoutFHIR from '@/layout/AppLayoutFHIR.vue';
 import MeasurementsView from "@/view/fhir/measurements/MeasurementsView.vue";
@@ -7,15 +7,11 @@ import AppLayoutAnnotator from "@/layout/AppLayoutAnnotator.vue";
 import HomeViewAnnotator from "@/view/annotator/HomeView.vue";
 import PrimaryView from "@/view/annotator/measurements/PrimaryView.vue";
 import testaaa from "@/view/annotator/measurements/testaaa.vue";
-import Apptest from "@/layout/Apptest.vue";
+import ts from "typescript";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes:[
-        {
-            path:"/test",
-            component: Apptest
-        },
         {
             path:"/",
             component: AppLayoutAnnotator,
@@ -63,6 +59,7 @@ const router = createRouter({
     }]
 })
 
+// @ts-ignore
 router.beforeEach((to, from, next) => {
     const lastRoute = localStorage.getItem('lastRoute')
     if (lastRoute && lastRoute.startsWith('/annotator') && to.path.startsWith('/annotator')) {

@@ -8,6 +8,7 @@ declare module "*.vue" {
   }
   
 declare module '@vicons/ionicons5';
+declare module 'uuid';
 
 interface Window {
   showDirectoryPicker?: () => Promise<any>;

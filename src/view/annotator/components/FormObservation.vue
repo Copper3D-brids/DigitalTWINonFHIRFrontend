@@ -48,22 +48,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, PropType } from "vue";
 import { NForm, NFormItem, NInput, NButton, NIcon, NAutoComplete} from 'naive-ui';
-import { IFormObservation } from "@/models";
+import { IFormObservation, IAnnotatorObervation } from "@/models";
 import type { FormInst, FormItemRule} from 'naive-ui';
 import { useMessage } from 'naive-ui';
 import { useIcons } from "@/layout/composables/icons";
 
 const props = defineProps({
-    oid: String,
+    disabled: Boolean,
+    filledData: Object as PropType<IAnnotatorObervation>,
     belongTo: {
         type: Array<String>,
         default: () => []
     }
 });
 
-watch(() => props.belongTo, (newVal, oldVal) => {
+watch(() => props.belongTo, (newVal) => {
     if(!validateClicked.value)
         formValue.value.belongTo = newVal;
 })
@@ -76,7 +77,6 @@ const buttonColor = ref('#10b981');
 
 const message = useMessage()
 const formValue=ref<IFormObservation>({
-        oid: props.oid!,
         operation: 'add',
         belongTo: props.belongTo!,
         observation: {
@@ -87,6 +87,17 @@ const formValue=ref<IFormObservation>({
           unitsSystem: 'http://unitsofmeasure.org',
         },
       });
+
+onMounted(() => {
+   if(!!props.filledData)
+    init();
+})
+
+const init = ()=>{
+    validateClicked.value = props.disabled;
+    buttonColor.value = '#f43f5e';
+    formValue.value.observation = props.filledData!;    
+}
 
 const codeSystemOptions = ['http://loinc.org', 'http://snomed.info/sct', 'http://dicom.nema.org/resources/ontology/DCM'].map((suffix) => {
           return {
@@ -103,10 +114,12 @@ const unitsSystemOptions = ['http://unitsofmeasure.org'].map((suffix) => {
 
 const size = ref<'small' | 'medium' | 'large'>('large')
 
+// @ts-ignore
 const rules =  {
     observation: {
             value: {
                 required: true,
+                // @ts-ignore
                 validator(rule: FormItemRule, value: string) {
                     if (!value) {
                         return new Error('Value is required')
@@ -118,6 +131,7 @@ const rules =  {
 
             code: {
                 required: true,
+                // @ts-ignore
                 validator(rule: FormItemRule, value: string) {
                     if (!value) {
                         return new Error('Code is required')
@@ -129,6 +143,7 @@ const rules =  {
 
             codeSystem: {
                 required: true,
+                // @ts-ignore
                 validator(rule: FormItemRule, value: string) {
                     if (!value) {
                         return new Error('codeSystem is required')
@@ -157,10 +172,21 @@ const handleValidateClick = (e: MouseEvent) =>{
         formRef.value?.validate((errors) => {
           if (!errors) {
             message.success('Valid')
-            buttonColor.value = '#f43f5e';
+            // buttonColor.value = '#f43f5e';
             formValue.value.operation = "add";
             emit('updateObservation', formValue.value);
-            validateClicked.value = true;
+            // validateClicked.value = true;
+            formValue.value = {
+                operation: 'add',
+                belongTo: props.belongTo!,
+                observation: {
+                  value: '',
+                  code: '',
+                  units: '',
+                  codeSystem: '',
+                  unitsSystem: 'http://unitsofmeasure.org',
+                },
+              };
           }
           else {
             console.log(errors)

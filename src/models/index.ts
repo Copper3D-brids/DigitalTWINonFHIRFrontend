@@ -87,7 +87,6 @@ export interface IAnnotatorDescription {
 }
 
 export interface IFormObservation {
-        oid: string,
         operation: 'add' | 'remove',
         belongTo: Array<String>,
         observation: IAnnotatorObervation,

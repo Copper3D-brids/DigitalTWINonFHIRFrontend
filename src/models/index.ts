@@ -50,6 +50,7 @@ export interface IAnnotatorImagingStudySeriesInstance {
 
 export interface IAnnotatorImagingStudySeries {
     uid: string;
+    name: string;
     endpointUrl: string;
     numberOfInstances: number;
     bodySite?: {
@@ -109,4 +110,8 @@ export interface IAnnotatorFormDescription {
         path: string;
     },
     patients: Array<IAnnotatorFormPatient>;
+}
+
+export interface ISelectedPatientsSamples {
+    [key:string]: Array<string>;
 }

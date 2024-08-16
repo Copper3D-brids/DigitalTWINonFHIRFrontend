@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, PropType } from "vue";
+import { ref, watch, computed, PropType, onMounted } from "vue";
 import FormObservation from "../components/FormObservation.vue";
 import { IFormObservation, IAnnotatorFormDescription} from "@/models";
 import { v4 as uuidv4 } from 'uuid';
@@ -28,6 +28,12 @@ const uniqueDisplayObservations = computed(() => [...new Set(displayObservations
 
 watch(() => props.patients, (newVal) => {
   if(newVal!.length > 0){
+    generateDisplayObservations();
+  }
+})
+
+onMounted(() => {
+  if(props.formDescription){
     generateDisplayObservations();
   }
 })

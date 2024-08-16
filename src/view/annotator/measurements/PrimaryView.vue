@@ -38,6 +38,7 @@
         </template>
         <template #imagingstudy>
           <n-h6>Generating ImagingStudy for selected patients:</n-h6>
+          <ImagingStudy :patients="patients" :formDescription="formDescription" :patientsDirectoryHandle="patientsDirectoryHandle"/>
         </template>
       </FormTab>
       <n-divider />
@@ -61,6 +62,7 @@ import { useRoute } from 'vue-router';
 import PageSummary from "@/components/PageSummary.vue";
 import FormTab from "../components/FormTab.vue";
 import Observation from "../components/Observation.vue";
+import ImagingStudy from "../components/ImagingStudy.vue";
 import { NStatistic, NButton, NSpace, NCheckbox, NCheckboxGroup, NH3, NH6, NDivider, NSwitch} from 'naive-ui';
 import {useFolderPickerStore} from "@/components/composables/folderpicker";
 import { storeToRefs } from "pinia";
@@ -122,18 +124,6 @@ watch(patients, (newVal) => {
 
 // @ts-ignore
 const updateObservations = (data: IFormObservation) => {
-  // if(data.operation === "add"){
-  //     data.belongTo.forEach((p) => {
-  //     const index = formDescription.value.patients.findIndex((item) => item.name === p);
-  //     formDescription.value.patients[index].observations.push(data);
-  //   })
-  // }else if (data.operation === "remove"){
-  //   data.belongTo.forEach((p) => {
-  //     const index = formDescription.value.patients.findIndex((item) => item.name === p);
-  //     formDescription.value.patients[index].observations = formDescription.value.patients[index].observations.filter((o) => JSON.stringify(o.observation) !== JSON.stringify(data.observation));
-  //   })
-  // }
-  
   updateDescriptionsObservations();
 }
 
@@ -159,7 +149,7 @@ const handleSwitchBtn = (value: boolean) => {
 
 <style scoped>
 .checkbox-item{
-  @apply flex justify-center items-center w-32 h-10 m-2 rounded-lg border-dotted border-2 border-orange-200 bg-orange-100 shadow-lg shadow-orange-300/50
+  @apply flex justify-center items-center w-32 h-10 m-2 rounded-lg border-dashed border-2 border-gray-300 bg-pink-50 shadow-md
 }
 
 </style>

@@ -44,12 +44,13 @@ export interface IAnnotatorImagingStudySeriesInstance {
     uid: string;
     sopClassUid: string;
     sopClassName: string;
-    number: number;
+    number: string;
     [key:string]: any;
 }
 
 export interface IAnnotatorImagingStudySeries {
     uid: string;
+    name: string;
     endpointUrl: string;
     numberOfInstances: number;
     bodySite?: {
@@ -57,7 +58,7 @@ export interface IAnnotatorImagingStudySeries {
         code: string;
         display: string;
     };
-    instance: Array<IAnnotatorImagingStudySeriesInstance>;
+    instances: Array<IAnnotatorImagingStudySeriesInstance>;
 }
 
 export interface IAnnotatorImagingStudy {
@@ -109,4 +110,8 @@ export interface IAnnotatorFormDescription {
         path: string;
     },
     patients: Array<IAnnotatorFormPatient>;
+}
+
+export interface ISelectedPatientsSamples {
+    [key:string]: Array<string>;
 }

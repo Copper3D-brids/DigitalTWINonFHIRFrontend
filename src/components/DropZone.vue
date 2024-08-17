@@ -6,10 +6,11 @@
         @drop.prevent="(event) => onChange(event, 'drop')"
         @click="(event) => onChange(event, 'click')" 
         :class="{'active-dropzone': active}"
-        class="w-2/5 h-40 file-upload ease-in-out duration-300"
+        class="w-3/5 h-2/5 md:h-80 file-upload ease-in-out duration-300"
     >
         <n-avatar
             round
+            class="animate-bounce"
             :size="40"
             :src="uploadImg"
         />

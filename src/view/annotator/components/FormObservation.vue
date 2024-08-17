@@ -13,7 +13,7 @@
             <n-form-item label="Value" path="observation.value">
                 <n-input v-model:value="formValue.observation.value" placeholder="Input value" />
             </n-form-item>
-            <n-form-item label="Uints" path="observation.units">
+            <n-form-item label="Units" path="observation.units">
                 <n-input v-model:value="formValue.observation.units" placeholder="units for value" />
             </n-form-item>
             <n-form-item label="Code" path="observation.code">
@@ -75,7 +75,7 @@ const { AddIcon, CloseIcon } = useIcons();
 const validateClicked = ref(false);
 const buttonColor = ref('#10b981');
 
-const message = useMessage()
+const message = useMessage();
 const formValue=ref<IFormObservation>({
         operation: 'add',
         belongTo: props.belongTo!,

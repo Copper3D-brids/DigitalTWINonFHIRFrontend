@@ -44,7 +44,7 @@ export interface IAnnotatorImagingStudySeriesInstance {
     uid: string;
     sopClassUid: string;
     sopClassName: string;
-    number: number;
+    number: string;
     [key:string]: any;
 }
 
@@ -58,7 +58,7 @@ export interface IAnnotatorImagingStudySeries {
         code: string;
         display: string;
     };
-    instance: Array<IAnnotatorImagingStudySeriesInstance>;
+    instances: Array<IAnnotatorImagingStudySeriesInstance>;
 }
 
 export interface IAnnotatorImagingStudy {

@@ -13,7 +13,7 @@
    <div v-show="annotator==='Annotate'? false : true">
     <div class="p-3 m-3">
       <n-h3>Select Patients:</n-h3>
-      <n-switch v-model:value="activeSwitch"  @update:value="handleSwitchBtn">
+      <n-switch v-model:value="activePatientsSwitch"  @update:value="handleSwitchBtn">
         <template #checked>
           Selected All Patients
         </template>
@@ -38,7 +38,7 @@
         </template>
         <template #imagingstudy>
           <n-h6>Generating ImagingStudy for selected patients:</n-h6>
-          <ImagingStudy :patients="patients" :formDescription="formDescription" :patientsDirectoryHandle="patientsDirectoryHandle"/>
+          <ImagingStudy :patients="patients" :formDescription="formDescription" :patientsDirectoryHandle="patientsDirectoryHandle" @updateImagingStudy="updateImagingStudy"/>
         </template>
       </FormTab>
       <n-divider />
@@ -48,6 +48,20 @@
    <div>
     <div class="p-3 m-3">
       <n-h3>Measurements:</n-h3>
+      <n-switch
+      :rubber-band="false"
+      :rail-style="railStyle"
+      :value="activeImagingDetailSwitchRef"
+      :loading="loadingSwitchRef"
+      @update:value="handleUpdateSwitchValue"
+    >
+    <template #checked>
+        Back to normal Measurements
+      </template>
+      <template #unchecked>
+        Show Measurements Details
+      </template>
+    </n-switch>
       <pre>{{ JSON.stringify(descriptions, null, 2) }}</pre>
     </div>
    </div>
@@ -56,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch} from "vue";
+import { ref, onMounted, watch, CSSProperties} from "vue";
 
 import { useRoute } from 'vue-router';
 import PageSummary from "@/components/PageSummary.vue";
@@ -66,7 +80,7 @@ import ImagingStudy from "../components/ImagingStudy.vue";
 import { NStatistic, NButton, NSpace, NCheckbox, NCheckboxGroup, NH3, NH6, NDivider, NSwitch} from 'naive-ui';
 import {useFolderPickerStore} from "@/components/composables/folderpicker";
 import { storeToRefs } from "pinia";
-import { IAnnotatorDescription, IFormObservation, IAnnotatorFormDescription} from "@/models";
+import { IAnnotatorDescription, IAnnotatorImagingStudySeries, IAnnotatorFormDescription, IAnnotatorImagingStudy} from "@/models";
 import logo from "@/assets/images/3.png";
 
 
@@ -82,14 +96,50 @@ const dicoms = ref(0);
 const annotator = ref("Annotate");
 const patients = ref<Array<string>>([]);
 
+const activeImagingDetailSwitchRef = ref(false)
+const loadingSwitchRef = ref(false)
+
 const formDescription = ref<IAnnotatorFormDescription>({dataset:{id: "", uuid: "", name: root.value?.name!, path: "/"}, patients:[]})
 const descriptions= ref<IAnnotatorDescription>({dataset:{id: "", uuid: "", name: root.value?.name!, path: "/"}, patients:[]})
 
-const activeSwitch = ref(false);
+const activePatientsSwitch = ref(false);
+const railStyle = ({
+  focused,
+  checked
+}: {
+  focused: boolean
+  checked: boolean
+}): CSSProperties => {
+  const style: CSSProperties = {}
+  if (checked) {
+    style.background = '#a1a1aa'
+    if (focused) {
+      style.boxShadow = '0 0 0 2px #a1a1aa40'
+    }
+  } else {
+    style.background = '#38bdf8'
+    if (focused) {
+      style.boxShadow = '0 0 0 2px #38bdf840'
+    }
+  }
+  return style
+}
 
 const onHandleAnnotator = () => {
   annotator.value === "Annotate" ? annotator.value = "Submit" : annotator.value = "Annotate";
 }
+
+const handleUpdateSwitchValue = (value: boolean) => {
+  loadingSwitchRef.value = true;
+  setTimeout(() => {
+    activeImagingDetailSwitchRef.value = value;
+    loadingSwitchRef.value = false;
+  }, 1000)
+}
+
+watch(activeImagingDetailSwitchRef, (newVal) => {
+  updateDescriptions("imagingstudy")
+})
 
 onMounted(()=>{
   patientsDirectoryHandle.value = root.value?.children.filter((item: any) => item.name === filename.value)[0] as CustomFileSystemDirectoryHandle;
@@ -114,26 +164,49 @@ onMounted(()=>{
 watch(patients, (newVal) => {
   if(newVal.length > 0){
     if (newVal.length === formDescription.value.patients.length){
-      activeSwitch.value = true;
+      activePatientsSwitch.value = true;
     }
   }else{
-    activeSwitch.value = false;
+    activePatientsSwitch.value = false;
   }
 })
 
 
 // @ts-ignore
-const updateObservations = (data: IFormObservation) => {
-  updateDescriptionsObservations();
+const updateObservations = (data: IAnnotatorFormDescription) => {
+  updateDescriptions("observation");
 }
 
-const updateDescriptionsObservations = () => {
+// @ts-ignore
+const updateImagingStudy = (data: IAnnotatorFormDescription) => {
+  updateDescriptions("imagingstudy");
+}
+
+const updateDescriptions = (type:"observation"|"imagingstudy") => {
+
   descriptions.value.patients.forEach((p) => {
     const index = formDescription.value.patients.findIndex((item) => item.name === p.name);
-    p.observations = [];
-    formDescription.value.patients[index].observations.forEach((o) => {
-      p.observations.push(o.observation);
-    })
+    if(type === "observation"){
+      p.observations = [];
+      formDescription.value.patients[index].observations.forEach((o) => {
+        p.observations.push(o.observation);
+      })
+    }
+    if(type === "imagingstudy"){
+      if(activeImagingDetailSwitchRef.value){
+        p.imagingStudy = formDescription.value.patients[index].imagingStudy;
+      }else{
+        p.imagingStudy = {
+          ...formDescription.value.patients[index].imagingStudy,
+          series: formDescription.value.patients[index].imagingStudy?.series.map((s) => {
+            return {
+              ...s,
+              instances: []
+            }
+          }) as Array<IAnnotatorImagingStudySeries>
+        } as IAnnotatorImagingStudy
+      }
+    }
   })
 }
 

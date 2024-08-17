@@ -2133,6 +2133,11 @@ detect-libc@^2.0.0, detect-libc@^2.0.2:
   resolved "https://registry.npmjs.org/detect-libc/-/detect-libc-2.0.3.tgz"
   integrity sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==
 
+dicom-parser@^1.8.21:
+  version "1.8.21"
+  resolved "https://registry.yarnpkg.com/dicom-parser/-/dicom-parser-1.8.21.tgz#916fdc77776367976b8457cad462b5b7cf74eaea"
+  integrity sha512-lYCweHQDsC8UFpXErPlg86Px2A8bay0HiUY+wzoG3xv5GzgqVHU3lziwSc/Gzn7VV7y2KeP072SzCviuOoU02w==
+
 didyoumean@^1.2.2:
   version "1.2.2"
   resolved "https://registry.npmjs.org/didyoumean/-/didyoumean-1.2.2.tgz"

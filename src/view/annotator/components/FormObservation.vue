@@ -13,11 +13,14 @@
             <n-form-item label="Value" path="observation.value">
                 <n-input v-model:value="formValue.observation.value" placeholder="Input value" />
             </n-form-item>
-            <n-form-item label="Units" path="observation.units">
-                <n-input v-model:value="formValue.observation.units" placeholder="units for value" />
+            <n-form-item label="Unit" path="observation.unit">
+                <n-input v-model:value="formValue.observation.unit" placeholder="unit for value" />
             </n-form-item>
             <n-form-item label="Code" path="observation.code">
                 <n-input v-model:value="formValue.observation.code" placeholder="code for observation" />
+            </n-form-item>
+            <n-form-item label="Display" path="observation.display">
+                <n-input v-model:value="formValue.observation.display" placeholder="display for observation code" />
             </n-form-item>
             <n-form-item label="Code System" path="observation.codeSystem">
                 <n-auto-complete
@@ -27,11 +30,11 @@
                     :append="false"
                 />
             </n-form-item>
-            <n-form-item label="Units System" path="observation.unitsSystem">
+            <n-form-item label="Unit System" path="observation.unitSystem">
                 <n-auto-complete
-                    v-model:value="formValue.observation.unitsSystem"
-                    placeholder="Input units system"
-                    :options="unitsSystemOptions"
+                    v-model:value="formValue.observation.unitSystem"
+                    placeholder="Input unit system"
+                    :options="unitSystemOptions"
                     :append="false"
                 />
             </n-form-item>
@@ -82,9 +85,10 @@ const formValue=ref<IFormObservation>({
         observation: {
           value: '',
           code: '',
-          units: '',
+          unit: '',
+          display: '',
           codeSystem: '',
-          unitsSystem: 'http://unitsofmeasure.org',
+          unitSystem: 'http://unitsofmeasure.org',
         },
       });
 
@@ -105,7 +109,7 @@ const codeSystemOptions = ['http://loinc.org', 'http://snomed.info/sct', 'http:/
             value: suffix
           }
         });
-const unitsSystemOptions = ['http://unitsofmeasure.org'].map((suffix) => {
+const unitSystemOptions = ['http://unitsofmeasure.org'].map((suffix) => {
           return {
             label: suffix,
             value: suffix
@@ -153,9 +157,9 @@ const rules =  {
                 trigger: 'blur'
             },
             
-            units: {
+            unit: {
                 required: true,
-                message: 'Please input the units for the value',
+                message: 'Please input the unit for the value',
                 trigger: ['input', 'blur']
             }
         },
@@ -182,9 +186,10 @@ const handleValidateClick = (e: MouseEvent) =>{
                 observation: {
                   value: '',
                   code: '',
-                  units: '',
+                  unit: '',
+                  display: '',
                   codeSystem: '',
-                  unitsSystem: 'http://unitsofmeasure.org',
+                  unitSystem: 'http://unitsofmeasure.org',
                 },
               };
           }

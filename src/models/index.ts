@@ -34,9 +34,10 @@ export interface IPatient {
 export interface IAnnotatorObervation {
     value: string;
     code: string;
-    units: string;
+    unit: string;
     codeSystem: string;
-    unitsSystem: string;
+    unitSystem: string;
+    display: string;
     [key:string]: any;
 }
 

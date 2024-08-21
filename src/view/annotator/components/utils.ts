@@ -40,11 +40,10 @@ export const SNOMEDCT:SNOMEDCTType = {
 }
 
 export const SOP_CLASS_NAMES: { [uid: string]: string } = {
-    "1.2.840.10008.5.1.4.1.1.1": "CT Image Storage",
-    "1.2.840.10008.5.1.4.1.1.2": "MR Image Storage",
-    "1.2.840.10008.5.1.4.1.1.3": "US Image Storage",
-    "1.2.840.10008.5.1.4.1.1.4": "NM Image Storage",
-    "1.2.840.10008.5.1.4.1.1.5": "RT Image Storage",
+    "1.2.840.10008.5.1.4.1.1.1": "Computed Radiography Image Storage",
+    "1.2.840.10008.5.1.4.1.1.2": "CT Image Storage",
+    "1.2.840.10008.5.1.4.1.1.3.1": "Ultrasound Multi-frame Image Storage",
+    "1.2.840.10008.5.1.4.1.1.4": "MR Image Storage",
     // Add more SOP Class UIDs and their names as needed
 };
 

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <FormObservation v-if="destroy" v-for="d in uniqueDisplayObservations" :key="uuidv4()" :belongTo="patients" :filledData="JSON.parse(d)" disabled  @updateObservation="updateObservations" />
-        <FormObservation :belongTo="patients"  @updateObservation="updateObservations"/>
+      <FormObservation :belongTo="patients"  @updateObservation="updateObservations"/>
+      <FormObservation v-if="destroy" v-for="d in uniqueDisplayObservations" :key="uuidv4()" :belongTo="patients" :selectedObservationValueType="JSON.parse(d)['observationValueType']" :filledData="JSON.parse(d)" disabled  @updateObservation="updateObservations" />
     </div>
 </template>
 
@@ -61,7 +61,7 @@ const generateDisplayObservations = () => {
     props.formDescription!.patients.forEach((p) => {
       if(props.patients.includes(p.name)){
         p.observations.forEach((o) => {
-          displayObservations.value.push(JSON.stringify(o.observation));
+          displayObservations.value.push(JSON.stringify(Object.assign(o.observation, {observationValueType: o.observationValueType})));
         })
       }
     })
@@ -74,7 +74,7 @@ const generateDisplayObservations = () => {
     })
     displayObservations.value = arrays.reduce((accumulator, currentValue) => {
       return accumulator.filter((o) => currentValue.map((c) => JSON.stringify(c.observation)).includes(JSON.stringify(o.observation)));
-    }).map((o) => JSON.stringify(o.observation));
+    }).map((o) => JSON.stringify(Object.assign(o.observation, {observationValueType: o.observationValueType})));
   }
   else{
     displayObservations.value = [];

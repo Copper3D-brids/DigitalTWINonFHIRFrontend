@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/uuid": "^10.0.0",
     "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "dicom-parser": "^1.8.21",
     "pinia": "^2.1.7",
     "relation-graph": "^2.2.2",

@@ -1,30 +1,35 @@
 import {createRouter, createWebHistory} from "vue-router";
-import HomeView from "../view/fhir/HomeView.vue";
+import FHIRView from "../view/fhir/FHIRView.vue";
 import AppLayoutFHIR from '@/layout/AppLayoutFHIR.vue';
 import MeasurementsView from "@/view/fhir/measurements/MeasurementsView.vue";
 import Patients from "@/view/fhir/measurements/Patients.vue";
 import AppLayoutAnnotator from "@/layout/AppLayoutAnnotator.vue";
-import HomeViewAnnotator from "@/view/annotator/HomeView.vue";
+import AnnotatorView from "@/view/annotator/AnnotatorView.vue";
 import PrimaryView from "@/view/annotator/measurements/PrimaryView.vue";
 import testaaa from "@/view/annotator/measurements/testaaa.vue";
-import ts from "typescript";
+import HomeView from "@/view/home/HomeView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes:[
         {
             path:"/",
+            name:"home",
+            component: HomeView
+        },
+        {
+            path:"/annotator",
             component: AppLayoutAnnotator,
             children:[
                 {
-                    path:"/",
+                    path:"/annotator",
                     name:"home-annotator",
-                    component: HomeViewAnnotator
+                    component: AnnotatorView
                 },
                 {
                     // path:"/annotator/:name",
-                    path:"/annotator",
-                    name:"annotator",
+                    path:"/annotator/primary",
+                    name:"primary",
                     component: PrimaryView
                 },
                 {
@@ -41,7 +46,7 @@ const router = createRouter({
             {
                 path:"/fhir",
                 name:"home-fhir",
-                component: HomeView
+                component: FHIRView
             },
             {
                 path:"/fhir/measurements",
@@ -60,15 +65,15 @@ const router = createRouter({
 })
 
 // @ts-ignore
-router.beforeEach((to, from, next) => {
-    const lastRoute = localStorage.getItem('lastRoute')
-    if (lastRoute && lastRoute.startsWith('/annotator') && to.path.startsWith('/annotator')) {
-      next('/')
-    } else {
-      next()
-    }
-    localStorage.setItem('lastRoute', to.path)
-  })
+// router.beforeEach((to, from, next) => {
+//     const lastRoute = localStorage.getItem('lastRoute')
+//     if (lastRoute && lastRoute.startsWith('/primary') && to.path.startsWith('/primary')) {
+//       next('/')
+//     } else {
+//       next()
+//     }
+//     localStorage.setItem('lastRoute', to.path)
+//   })
 
 
 export default router;

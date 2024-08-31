@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-col">
+    <div class="flex flex-col pb-5">
         <ImagingStudySeries v-for="p in patients" :key="p" :patient="p" :patient-directory-handle="getPatientDirectoryHandle(p)" :selected-samples="selectedPatientsSamples[p]" v-model:selected-patients-samples ="selectedPatientsSamples"/>
-        <n-button  class="w-4/5 ml-auto mr-auto rounded-md bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-300 hover:to-orange-400 shadow-sm my-1" @click="onHandleGenerateImagingStudy">
+        <!-- <n-button  class="w-4/5 ml-auto mr-auto rounded-md bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-300 hover:to-orange-400 shadow-sm my-1" @click="onHandleGenerateImagingStudy">
             <n-text class="p-1 text-lg subpixel-antialiased font-semibold text-zinc-100 " >
                 Generate 
                 <n-text class="text-zinc-100" v-if="patients.length>1?true:false">ImagingStudies</n-text> 
@@ -10,16 +10,30 @@
                 <n-text v-for="p in patients" class="mx-1 text-gray-500">{{p}}</n-text>
             </n-text>
             
-        </n-button>
+        </n-button> -->
+        <fancy-button @click="onHandleGenerateImagingStudy"> 
+            <n-text class="p-1 text-lg subpixel-antialiased font-semibold text-zinc-900 " >
+                Generate 
+                <n-text class="text-zinc-900" v-if="patients.length>1?true:false">ImagingStudies</n-text> 
+                <n-text class="text-zinc-900" v-else>ImagingStudy</n-text>
+                for selecting patients:  
+                <!-- <n-text v-for="p in patients" class="mx-1 text-gray-500">{{p}}</n-text> -->
+                <n-text v-for="(p, index) in displayedPatients" :key="index" class="mx-1 text-gray-500">
+                    {{ p }}
+                </n-text>
+                <n-text v-if="patients.length > 3" class="mx-1 text-gray-500">...</n-text>
+            </n-text>
+        </fancy-button>
     </div>
 </template>
 
 <script setup lang="ts">
 import { IAnnotatorFormDescription, ISelectedPatientsSamples, IAnnotatorImagingStudySeries, IAnnotatorImagingStudySeriesInstance} from "@/models";
-import { PropType, onMounted, ref, watch } from "vue";
+import { PropType, onMounted, ref, watch, computed } from "vue";
 import ImagingStudySeries from "./ImagingStudySeries.vue";
 import { NButton, NText, useMessage} from "naive-ui";
 import { readDicom, SNOMEDCT, SOP_CLASS_NAMES } from "./utils";
+import FancyButton from "@/components/FancyButton.vue";
 
 
 const props = defineProps({
@@ -45,6 +59,14 @@ watch(() => props.patients, (newVal) => {
     newVal.forEach((patient) => {
         updateImagingStudyBaseInfo(patient);
     });
+});
+
+const displayedPatients = computed(() => {
+    if (props.patients.length <= 3) {
+        return props.patients;
+    } else {
+        return props.patients.slice(0, 3);
+    }
 });
 
 const onHandleGenerateImagingStudy = () => {
@@ -155,5 +177,6 @@ const getPatientDirectoryHandle = (patientName: string) => {
 </script>
 
 <style scoped>
+
 
 </style>

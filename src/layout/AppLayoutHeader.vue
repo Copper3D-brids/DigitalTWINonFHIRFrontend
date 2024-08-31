@@ -7,7 +7,7 @@
             src="4.png"
           />
           <n-gradient-text type="info" class="select-none">
-            DigitalTWIN on FHIR
+            DigitalTWINs on FHIR
           </n-gradient-text>
         </n-flex>
       </RouterLink>

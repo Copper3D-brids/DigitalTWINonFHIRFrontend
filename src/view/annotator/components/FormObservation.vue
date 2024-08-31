@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col md:flex-row  px-11 pb-2 pt-1 shadow-md m-2 shadow-zinc-400 rounded-md bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 ">
+    <div class="flex flex-col md:flex-row  px-11 pb-2 pt-1 shadow-md m-2 shadow-zinc-400 rounded-md bg-gradient-to-r from-zinc-300 via-gray-200 to-stone-400 ">
         <n-form
             ref="formRef"
             inline
@@ -10,7 +10,7 @@
             :disabled="validateClicked"
             class="flex flex-col flex-wrap mt-2 mr-auto ob-align-content-start"
         >   
-            <n-form-item label="ValueType" class="border shadow-lg border-zinc-300 rounded-md px-3">
+            <n-form-item label="ValueType" class="border shadow-fancy-2 border-zinc-300 rounded-lg px-3">
                 <n-select v-model:value="formValue.observationValueType" :options="selectObservationValueOptions" @update:value="handleSelectObservationValueTypeUpdate"  class="w-full md:w-96"/>
             </n-form-item>
             
@@ -223,7 +223,7 @@
             </div>
             
         </n-form>
-        <n-button @click="handleValidateClick" class="md:my-auto md:ml-10 my-3" strong :color="buttonColor" >
+        <n-button @click="handleValidateClick" class="md:my-auto md:ml-10 my-3 rounded-md" :class="validateClicked?'shadow-fancy-3':'shadow-fancy-4'" strong :color="buttonColor" >
             <template #icon>
                 <n-icon>
                     <AddIcon v-if="!validateClicked"/>

@@ -9,7 +9,7 @@
   }
   /* ==== File Upload */
   .file-upload {
-    @apply text-12-regular flex cursor-pointer  flex-col items-center justify-center gap-3 rounded-md border border-dashed border-dark-500 bg-light-200 p-5;
+    @apply text-12-regular flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl  shadow-fancy-2  bg-light-200 p-5;
   }
 
   .file-upload_label {
@@ -17,3 +17,67 @@
   }
 }
  
+@layer base {
+  .remove-scrollbar::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    border-radius: 0px;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 0px;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: transparent;
+  }
+}
+
+/* remove scrollbar */
+/* ::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: transparent;
+} */
+
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: #737373;
+  /* border-radius: 10px; */
+}
+
+
+::-webkit-scrollbar-thumb {
+  background-color: #f4f4f5;
+  border-radius: 10px;
+  border: 3px solid #737373;
+}
+
+ 
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

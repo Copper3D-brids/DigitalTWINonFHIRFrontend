@@ -5,6 +5,7 @@ import MeasurementsView from "@/view/fhir/measurements/MeasurementsView.vue";
 import Patients from "@/view/fhir/measurements/Patients.vue";
 import AppLayoutAnnotator from "@/layout/AppLayoutAnnotator.vue";
 import AnnotatorView from "@/view/annotator/AnnotatorView.vue";
+import Annotator from "@/view/annotator/index.vue";
 import PrimaryView from "@/view/annotator/measurements/PrimaryView.vue";
 import testaaa from "@/view/annotator/measurements/testaaa.vue";
 import HomeView from "@/view/home/HomeView.vue";
@@ -19,17 +20,23 @@ const router = createRouter({
         },
         {
             path:"/annotator",
+            name:"index-annotator",
+            component: Annotator
+        },
+        {
+            path:"/annotator",
             component: AppLayoutAnnotator,
             children:[
                 {
+                    //query parameter {type: "measurements"| "workflow" | "workflow tool" | "workflow tool process"}
                     path:"/annotator",
                     name:"home-annotator",
                     component: AnnotatorView
                 },
                 {
                     // path:"/annotator/:name",
-                    path:"/annotator/primary",
-                    name:"primary",
+                    path:"/measurements",
+                    name:"measurements",
                     component: PrimaryView
                 },
                 {

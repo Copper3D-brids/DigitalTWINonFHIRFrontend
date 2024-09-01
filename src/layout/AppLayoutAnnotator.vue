@@ -30,10 +30,14 @@ import { storeToRefs } from "pinia";
 import { ref, watch, onMounted } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useIcons } from '@/layout/composables/icons';
+import { useRoute } from 'vue-router';
 
 
 const { renderIcon, generateRouterLabel } = useLayout();
 const {FolderIcon, FolderOpenIcon, DocumentIcon, GridIcon} = useIcons();
+
+const route = useRoute();
+
 
 // const {root, folderPicker} = useFolderPicker();
 const {root} = storeToRefs(useFolderPickerStore());
@@ -43,6 +47,9 @@ const menuOptions = ref<any[]>([{
 
 onMounted(()=>{
   if(!!root && root.value?.children){
+    const queryCategory = route.query.category;
+    console.log("query",queryCategory);
+    console.log("root",root.value.category);
     generateSideMenu(root.value);
   }
 })
@@ -50,7 +57,10 @@ onMounted(()=>{
 const generateLable = (name:string) => {
   switch (name) {
     case "primary":
-      return () => generateRouterLabel("primary", name, name)
+      if(root.value?.category === "Measurements"){
+        return () => generateRouterLabel("measurements", name, undefined, {name})
+      }
+      break;
     default:
       return name
   }
@@ -102,7 +112,7 @@ const generate = (children:Array<CustomFileSystemDirectoryHandle | FileSystemFil
 
 const generateSideMenu = (root: CustomFileSystemDirectoryHandle)=>{
   menuOptions.value = [{
-          label: () => generateRouterLabel("home-annotator", root!.name),
+          label: () => generateRouterLabel("home-annotator", root!.name, undefined, {category: root!.category}),
           key: root.name,
           icon: renderIcon(GridIcon)
       }, ...generate(root.children)]

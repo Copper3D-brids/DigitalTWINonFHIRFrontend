@@ -20,8 +20,8 @@
                     Click to upload
                 </span> or drag and drop
             </p>
-            <p>
-                SPARC Dataset Folder
+            <p class="font-bold">
+                SPARC {{ !!props.category && props.category  }} SDS dataset
             </p>
         </div>
         <!-- <input type="file" ref="fileInput" webkitdirectory  @change="handleFileChange" style="display: none" /> -->
@@ -35,6 +35,10 @@ import { NAvatar } from "naive-ui";
 import {ref, onMounted} from "vue";
 import {useFolderPicker, useFolderPickerStore} from "./composables/folderpicker";
 import { storeToRefs } from "pinia";
+
+const props = defineProps<{
+  category?: Category
+}>();
 
 const active = ref(false);
 // const {root, folderPicker} = useFolderPicker();
@@ -76,13 +80,13 @@ onMounted(()=>{
 const triggerFolderDrop = async (e:DragEvent) => {
     toggleActive();
     const item = e.dataTransfer!.items[0];
-    await folderDrop(item)
+    await folderDrop(item, props.category);
 
 }
 
 const triggerFolderInput = async () => {
     // fileInput.value?.click();
-    await folderPicker();
+    await folderPicker(props.category);
 };
 
 const toggleActive = () => {

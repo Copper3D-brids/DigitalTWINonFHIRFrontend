@@ -1,6 +1,5 @@
 import { h, Component, computed} from 'vue';
 import {NIcon} from "naive-ui";
-import { h } from 'vue';
 import { RouterLink } from 'vue-router';
 
 export function useLayout(){
@@ -9,15 +8,15 @@ export function useLayout(){
         return () => h(NIcon, null, { default: () => h(icon) })
     }
 
-    const generateRouterLabel = (routerName:string, labelName: string, name: string|null=null) => {
+    const generateRouterLabel = (routerName:string, labelName: string, params?:{[key:string]:any}, query?:{[key:string]:any}) => {
 
         return h(
             RouterLink,
             {
                 to:{
                     name: routerName,
-                    params: { },
-                    query: {name}
+                    params: params || {},
+                    query: query || {}
                 },
             },
             {default: ()=> labelName}

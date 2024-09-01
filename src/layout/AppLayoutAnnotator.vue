@@ -1,22 +1,19 @@
 <template>
-   <n-layout style="height: 100vh">
-
-    <n-layout-header bordered style="height: 8vh;">
+   <n-layout class="flex flex-col bg-gradient-to-r from-zinc-100 to-neutral-300 h-screen">
+    <n-layout-header class="bg-transparent h-[8vh] mt-auto shadow-sm">
         <app-layout-header />
     </n-layout-header>
     
 
-    <n-layout position="absolute" style="top: 8vh; bottom: 5vh" has-sider @dragover.prevent @drop="(e)=>e.preventDefault()">
+    <n-layout class="flex-1 h-[87vh] bg-transparent" has-sider @dragover.prevent @drop="(e)=>e.preventDefault()">
       <app-layout-sider v-if="root ? true : false" :menu-options="menuOptions" :width="320"/>
 
-      <n-layout  :native-scrollbar="false">
+      <n-layout  :native-scrollbar="false" class="bg-transparent">
         <router-view></router-view>
       </n-layout>
     </n-layout>
     <n-layout-footer
-      position="absolute"
-      style="height: 5vh;"
-      bordered
+      class="h-[5vh] mt-auto bg-transparent footer"
     >
       <app-layout-footer></app-layout-footer>
     </n-layout-footer>
@@ -33,10 +30,14 @@ import { storeToRefs } from "pinia";
 import { ref, watch, onMounted } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useIcons } from '@/layout/composables/icons';
+import { useRoute } from 'vue-router';
 
 
 const { renderIcon, generateRouterLabel } = useLayout();
 const {FolderIcon, FolderOpenIcon, DocumentIcon, GridIcon} = useIcons();
+
+const route = useRoute();
+
 
 // const {root, folderPicker} = useFolderPicker();
 const {root} = storeToRefs(useFolderPickerStore());
@@ -45,14 +46,21 @@ const menuOptions = ref<any[]>([{
 }]) 
 
 onMounted(()=>{
-  // console.log("mounted:", root);
-  
+  if(!!root && root.value?.children){
+    const queryCategory = route.query.category;
+    console.log("query",queryCategory);
+    console.log("root",root.value.category);
+    generateSideMenu(root.value);
+  }
 })
 
 const generateLable = (name:string) => {
   switch (name) {
     case "primary":
-      return () => generateRouterLabel("annotator", name, name)
+      if(root.value?.category === "Measurements"){
+        return () => generateRouterLabel("measurements", name, undefined, {name})
+      }
+      break;
     default:
       return name
   }
@@ -102,15 +110,19 @@ const generate = (children:Array<CustomFileSystemDirectoryHandle | FileSystemFil
     return options;
 }
 
+const generateSideMenu = (root: CustomFileSystemDirectoryHandle)=>{
+  menuOptions.value = [{
+          label: () => generateRouterLabel("home-annotator", root!.name, undefined, {category: root!.category}),
+          key: root.name,
+          icon: renderIcon(GridIcon)
+      }, ...generate(root.children)]
+}
+
 watch(root, () => {
   
   if(!!root && root.value?.children){
     
-    menuOptions.value = [{
-          label: () => generateRouterLabel("home-annotator", root.value!.name),
-          key: root.value.name,
-          icon: renderIcon(GridIcon)
-      }, ...generate(root.value.children)]   
+      generateSideMenu(root.value);
   }
 })
 
@@ -120,6 +132,15 @@ watch(root, () => {
 </script>
 
 <style scoped>
+.test{
 
-
+background: linear-gradient(145deg, #ffffff, #dcdcdd);
+box-shadow:  5px 5px 10px #cfcfd0,
+             -5px -5px 10px #ffffff;
+}
+.footer {
+background: linear-gradient(45deg, #ffffff, #dcdcdd);
+box-shadow:  5px -5px 10px #cfcfd0,
+             -5px 5px 10px #ffffff;
+}
 </style>

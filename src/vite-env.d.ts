@@ -18,8 +18,11 @@ interface Window {
 //   children: Array<FileSystemDirectoryHandle | FileSystemFileHandle>;
 // }
 
+type Category = "Measurements" | "Workflow" | "Workflow tool" | "Workflow tool process";
+
 interface CustomFileSystemDirectoryHandle extends FileSystemDirectoryHandle {
   children: Array<CustomFileSystemDirectoryHandle | FileSystemFileHandle>;
+  category?: Category;
 }
 
 interface ImportMeta {

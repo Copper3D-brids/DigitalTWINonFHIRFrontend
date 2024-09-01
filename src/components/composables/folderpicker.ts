@@ -23,7 +23,7 @@ export function useFolderPicker(){
         return handle;
     }
 
-    const folderPicker = async () => {
+    const folderPicker = async (category: Category | undefined) => {
        try {
             if (!window.showDirectoryPicker) {
                 alert('Your browser is not support showDirectoryPicker');
@@ -33,17 +33,19 @@ export function useFolderPicker(){
             const handle = await window.showDirectoryPicker();
 
             root.value = await processHandle(handle)
+            root.value!.category = category;
 
        } catch (error) {
             console.log(error);
        }
     }
 
-    const folderDrop = async (item:DataTransferItem) => {
+    const folderDrop = async (item:DataTransferItem, category:Category | undefined) => {
         try {
             if (item.kind === 'file') {
                 const handle = await (item as any).getAsFileSystemHandle();
                 root.value = await processHandle(handle)
+                root.value!.category = category;
             }
         } catch (error) {
            console.log(error);

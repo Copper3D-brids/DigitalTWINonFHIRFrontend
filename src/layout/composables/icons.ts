@@ -16,6 +16,8 @@ import {
     AddOutline as AddIcon,
     CloseOutline as CloseIcon,
     RemoveOutline as RemoveIcon,
+    ChevronBackOutline as ChevronBackIcon,
+    ChevronForwardOutline as ChevronForwardIcon
   } from '@vicons/ionicons5';
 
 export function useIcons(){
@@ -36,6 +38,8 @@ export function useIcons(){
         GridIcon,
         AddIcon,
         CloseIcon,
-        RemoveIcon
+        RemoveIcon, 
+        ChevronBackIcon,
+        ChevronForwardIcon
     }
 }

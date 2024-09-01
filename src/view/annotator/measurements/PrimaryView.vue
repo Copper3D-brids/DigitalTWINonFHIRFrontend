@@ -62,7 +62,7 @@
         Show Measurements Details
       </template>
     </n-switch>
-      <pre>{{ JSON.stringify(descriptions, null, 2) }}</pre>
+      <pre class="my-1 p-2 rounded-md shadow-fancy-inner">{{ JSON.stringify(descriptions, null, 2) }}</pre>
     </div>
    </div>
    
@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, CSSProperties} from "vue";
 
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import PageSummary from "@/components/PageSummary.vue";
 import FormTab from "../components/FormTab.vue";
 import Observation from "../components/Observation.vue";
@@ -87,6 +87,7 @@ import logo from "@/assets/images/3.png";
 const { root } = storeToRefs(useFolderPickerStore());
 
 const route = useRoute();
+const router = useRouter();
 
 const filename = ref(route.query.name);
 const breadcrumbs = [root.value?.name, filename.value] as Array<string>;
@@ -143,22 +144,28 @@ watch(activeImagingDetailSwitchRef, (newVal) => {
 
 onMounted(()=>{
   patientsDirectoryHandle.value = root.value?.children.filter((item: any) => item.name === filename.value)[0] as CustomFileSystemDirectoryHandle;
-  patientsDirectoryHandle.value.children.forEach((item: CustomFileSystemDirectoryHandle | FileSystemFileHandle) => {
-    if(item.kind === "directory"){
-      samples.value += item.children.length;
-      descriptions.value.patients.push({id: "", uuid: "", name: item.name, path: root.value?.name + "/" + item.name, observations: [], imagingStudy: null})
-      formDescription.value.patients.push({id: "", uuid: "", name: item.name, path: root.value?.name + "/" + item.name, observations: [], imagingStudy: null})
-      item.children.forEach((sample: CustomFileSystemDirectoryHandle | FileSystemFileHandle) =>{
-        if (sample.kind === "directory"){
-            sample.children.forEach((dcm) => {
-            if(dcm.kind === "file" && dcm.name.endsWith(".dcm")){
-              dicoms.value += 1;
-            }
-          })  
-        }
-      })
-    }
-  }) 
+
+  if (!patientsDirectoryHandle.value || !patientsDirectoryHandle.value.children){
+    // router.push({name: "home-annotator"})
+    router.push('/')
+  }else{
+    patientsDirectoryHandle.value.children.forEach((item: CustomFileSystemDirectoryHandle | FileSystemFileHandle) => {
+      if(item.kind === "directory"){
+        samples.value += item.children.length;
+        descriptions.value.patients.push({id: "", uuid: "", name: item.name, path: root.value?.name + "/" + item.name, observations: [], imagingStudy: null})
+        formDescription.value.patients.push({id: "", uuid: "", name: item.name, path: root.value?.name + "/" + item.name, observations: [], imagingStudy: null})
+        item.children.forEach((sample: CustomFileSystemDirectoryHandle | FileSystemFileHandle) =>{
+          if (sample.kind === "directory"){
+              sample.children.forEach((dcm) => {
+              if(dcm.kind === "file" && dcm.name.endsWith(".dcm")){
+                dicoms.value += 1;
+              }
+            })  
+          }
+        })
+      }
+    }) 
+  }
 })
 
 watch(patients, (newVal) => {

@@ -3,10 +3,10 @@
         collapse-mode="width"
         :collapsed-width="60"
         :width="width"
-
         :native-scrollbar="false"
         bordered
         show-trigger="bar"
+        class="bg-transparent shadow-sm"
     >
         <n-menu
             :collapsed-width="64"

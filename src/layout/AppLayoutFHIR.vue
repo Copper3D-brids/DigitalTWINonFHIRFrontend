@@ -28,8 +28,8 @@
 <script setup lang="ts">
 import AppLayoutHeader from "@/layout/AppLayoutHeader.vue";
 import AppLayoutFooter from "@/layout/AppLayoutFooter.vue";
-import AppLayoutSider from "@/layout/AppLayoutSider.vue"
-import { NLayout,  NLayoutFooter, NLayoutHeader} from 'naive-ui'
+import AppLayoutSider from "@/layout/AppLayoutSider.vue";
+import { NLayout,  NLayoutFooter, NLayoutHeader} from 'naive-ui';
 
 
 import { useLayout } from '@/layout/composables/layout';
@@ -43,7 +43,8 @@ const {CogIcon, LaptopIcon, GameControllerIcon, RocketIcon, LibraryIcon,} = useI
 
 const menuOptions = [
   {
-    label: () => generateRouterLabel("home-fhir", "Home"),
+    // label: () => generateRouterLabel("home-fhir", "Home"),
+    label: () => generateRouterLabel("home-annotator", "Go Annotator"),
     key: 'overall',
     icon: renderIcon(LaptopIcon)
   },

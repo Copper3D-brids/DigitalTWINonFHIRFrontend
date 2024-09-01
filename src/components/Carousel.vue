@@ -5,7 +5,7 @@
 
     <div class="carousel main">
       <div class="list-img" :style="{ transform: `translateY(${index * -100}%)` }">
-        <!-- <div class="item">
+        <div class="item">
           <img :src="img1" alt="" />
         </div>
 
@@ -19,7 +19,7 @@
 
         <div class="item">
           <img :src="img4" alt="" />
-        </div> -->
+        </div>
       </div>
 
       <div class="box-info">
@@ -134,12 +134,13 @@ a {
 }
 
 .carousel .box-info {
-  position: absolute;
+  /* position: absolute;
   top: 50%;
   transform: translateY(-50%);
   width: 650px;
   height: 384px;
-  overflow: hidden;
+  overflow: hidden; */
+    @apply absolute top-1/2 transform -translate-y-1/2 sm:w-[650px] sm:h-96 overflow-hidden w-[300px] h-full  
 }
 
 .box-info .list-info {
@@ -152,21 +153,23 @@ a {
   justify-content: center;
   color: #fff;
   height: 250px; */
-  @apply flex flex-col justify-center text-white h-96
+  @apply flex flex-col justify-center text-white sm:h-96 h-screen 
 }
 
 .info h2 {
-  font-size: 50px;
-  line-height: 1;
+  /* font-size: 50px;
+  line-height: 1; */
+  @apply sm:text-4xl text-xl 
 }
 
 .info p {
-  font-size: 16px;
-  margin: 20px 0;
+  /* font-size: 16px;
+  margin: 20px 0; */
+  @apply text-base sm:my-5 my-16
 }
 
 .info .btn {
-  display: inline-flex;
+  /* display: inline-flex;
   justify-content: center;
   align-items: center;
   width: 250px;
@@ -177,7 +180,8 @@ a {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   font-size: 16px;
   color: #fff;
-  font-weight: 600;
+  font-weight: 600; */
+  @apply inline-flex justify-center items-center sm:w-60 sm:h-20 h-10 bg-transparent border-2 border-white rounded-full shadow-md text-white sm:font-semibold
 }
 
 .carousel .list-img {
@@ -186,10 +190,11 @@ a {
 }
 
 .list-img .item {
-  position: relative;
+  /* position: relative;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: center; */
+    @apply relative h-full hidden sm:flex items-center
 }
 
 .item img {
@@ -207,7 +212,7 @@ a {
 }
 
 .navigation span {
-  display: inline-flex;
+  /* display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 60px;
@@ -219,7 +224,8 @@ a {
   cursor: pointer;
   margin: 0 10px;
   font-size: 55px;
-  color: #fff;
+  color: #fff; */
+  @apply inline-flex items-center justify-center w-10 h-10 sm:w-16 sm:h-16 bg-transparent border-2 border-white rounded-full shadow-md cursor-pointer mx-4 text-white sm:text-4xl text-xl
 }
 
 .bg-box .bg {

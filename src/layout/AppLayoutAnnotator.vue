@@ -1,5 +1,5 @@
 <template>
-   <n-layout class="flex flex-col bg-gradient-to-r from-zinc-100 to-neutral-300 h-screen">
+   <n-layout class="flex flex-col bg-fancy-gradient h-screen">
     <n-layout-header class="bg-transparent h-[8vh] mt-auto shadow-sm">
         <app-layout-header />
     </n-layout-header>

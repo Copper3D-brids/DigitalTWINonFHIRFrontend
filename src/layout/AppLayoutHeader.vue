@@ -1,14 +1,14 @@
 <template>
     <n-flex justify="space-between" align="center" style="height: 100%; padding: 2px 20px;">
       <RouterLink to="/">
-        <n-flex class="cursor-pointer">
+        <n-flex class="cursor-pointer flex flex-row items-center">
           <n-avatar
             size="medium"
             src="4.png"
           />
-          <n-gradient-text type="info" class="select-none">
+          <h1  class="select-none heading">
             DigitalTWINs on FHIR
-          </n-gradient-text>
+          </h1>
         </n-flex>
       </RouterLink>
       <n-flex v-show="screenWidth > 699 ? true : false">
@@ -38,11 +38,23 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+
 .n-gradient-text {
   font-size: 25px;
 }
 .logo{
   width: 200px;
   height: auto;
+}
+.heading {
+  font-family: 'Luckiest Guy';
+  font-size: 3vmin;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: 3px;
+  color: #71717a;
+  text-align: center;
+  text-shadow: 1px -1px #fafafa, -1px 1px #050505, -5px 5px 3px #80808080;
 }
 </style>

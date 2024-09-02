@@ -16,8 +16,8 @@ export default defineConfig({
     },
 
     manifest: {
-      name: 'DigitalTWIN on FHIR',
-      short_name: 'DigitalTWIN-FHIR',
+      name: 'DTsoFHIR',
+      short_name: 'DTsoFHIR',
       description: 'A visualisation panel for display the FHIR data in Digital platform.',
       theme_color: '#ffffff',
     },
@@ -44,4 +44,10 @@ export default defineConfig({
   build: {
     outDir: "./build",
   },
+  server: {
+    host: "0.0.0.0",
+    port: 3000,
+    open: true,
+    cors: true,
+  }
 })

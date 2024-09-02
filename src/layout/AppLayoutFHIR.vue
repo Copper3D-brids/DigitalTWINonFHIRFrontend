@@ -44,7 +44,7 @@ const {CogIcon, LaptopIcon, GameControllerIcon, RocketIcon, LibraryIcon,} = useI
 const menuOptions = [
   {
     // label: () => generateRouterLabel("home-fhir", "Home"),
-    label: () => generateRouterLabel("home-annotator", "Go Annotator"),
+    label: () => generateRouterLabel("index-annotator", "Go Annotator"),
     key: 'overall',
     icon: renderIcon(LaptopIcon)
   },

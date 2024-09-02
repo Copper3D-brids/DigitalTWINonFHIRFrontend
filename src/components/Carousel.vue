@@ -5,20 +5,20 @@
 
     <div class="carousel main">
       <div class="list-img" :style="{ transform: `translateY(${index * -100}%)` }">
-        <div class="item">
-          <img :src="img1" alt="" />
+        <div class="item custom-drop-shadow">
+          <img :src="img5" alt="" />
         </div>
 
-        <div class="item">
-          <img :src="img2" alt="" />
+        <div class="item custom-drop-shadow">
+          <img :src="img6" alt=""/>
         </div>
 
-        <div class="item">
-          <img :src="img3" alt="" />
+        <div class="item custom-drop-shadow">
+          <img :src="img7" alt="" />
         </div>
 
-        <div class="item">
-          <img :src="img4" alt="" />
+        <div class="item custom-drop-shadow">
+          <img :src="img10" alt="" />
         </div>
       </div>
 
@@ -30,19 +30,21 @@
               {{ d.description }}
             </p>
 
-            <router-link class="btn" :to="d.link">Let's go</router-link>
+            <router-link class="btn " :to="d.link">Let's go Annotating</router-link>
           </div>
         </div>
       </div>
 
       <div class="navigation">
         <span class="prev-btn" @click="prev">
-          <!-- <i class="bx bx-chevron-left"></i> -->
-          <ChevronBackIcon />
+          <n-icon>
+            <ChevronBackIcon />
+          </n-icon>
         </span>
         <span class="next-btn" @click="next">
-          <!-- <i class="bx bx-chevron-right"></i> -->
-          <ChevronForwardIcon />
+            <n-icon>
+                <ChevronForwardIcon />
+            </n-icon>
         </span>
       </div>
     </div>
@@ -54,30 +56,37 @@ import img1 from '../assets/images/img1.png';
 import img2 from '../assets/images/img2.png';
 import img3 from '../assets/images/img3.png';
 import img4 from '../assets/images/img4.png';
+import img5 from '../assets/images/img5.png';
+import img6 from '../assets/images/img6.png';
+import img7 from '../assets/images/img7.png';
+import img8 from '../assets/images/img8.png';
+import img9 from '../assets/images/img9.png';
+import img10 from '../assets/images/img10.svg';
 import { ref, watchEffect } from 'vue';
+import { NIcon } from 'naive-ui';
 
 
-const {ChevronBackIcon, ChevronForwardIcon} = useIcons();
+const {ChevronBackIcon, ChevronForwardIcon, AddIcon} = useIcons();
 
 const data = ref([
     {
         title: "Primary Measurements Annotator",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit temporibus voluptate iure ullam commodi cupiditate eaque similique non id perferendis odit, ex corrupti tenetur optio molestias unde rerum! Ratione, consequuntur.",
+        description: "A SPARC SDS primary measurements dataset will be required. A SPARC SDS primary measurements dataset will be required. This dataset may contain MRI images and other EHR measurements for each patient. You can use the annotator to annotate the Observation and ImagingStudy for EHR data.",
         link: { name: 'home-annotator', query: { category: 'Measurements' } }
     },
     {
         title: "Workflow Annotator",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit temporibus voluptate iure ullam commodi cupiditate eaque similique non id perferendis odit, ex corrupti tenetur optio molestias unde rerum! Ratione, consequuntur.",
+        description: "A SPARC SDS workflow dataset will be required. This dataset may contain a workflow .cwl file for cohort patients. You can use the annotator to add the Workflow's title, description, inputs, outputs, workflow tools and steps.",
         link: { name: 'home-annotator', query: { category: 'Workflow' } }
     },
     {
         title: "Workflow Tool Annotator",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit temporibus voluptate iure ullam commodi cupiditate eaque similique non id perferendis odit, ex corrupti tenetur optio molestias unde rerum! Ratione, consequuntur.",
+        description: "A SPARC SDS workflow tool dataset will be required. This dataset may contain a workflow tool .cwl file for cohort patients. You can use the annotator to add the Workflow tool's title, description, models and softwares.",
         link: { name: 'home-annotator', query: { category: "Workflow tool" } }
     },
     {
         title: "Workflow Tool Process Annotator",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit temporibus voluptate iure ullam commodi cupiditate eaque similique non id perferendis odit, ex corrupti tenetur optio molestias unde rerum! Ratione, consequuntur.",
+        description: "A SPARC SDS workflow tool process dataset will be required. This dataset may contain a workflow tool process data executing by a workflow tool for patients. You can use the annotator to add the Workflow tool process's EHR inputs and outputs for patients.",
         link: { name: 'home-annotator', query: { category: "Workflow tool process" } }
     },
 ])
@@ -122,10 +131,10 @@ ul > li {
   list-style: none;
 }
 
-a {
+/* a {
   text-decoration: none;
   color: #fff;
-}
+} */
 
 .carousel {
   height: 100vh;
@@ -140,7 +149,7 @@ a {
   width: 650px;
   height: 384px;
   overflow: hidden; */
-    @apply absolute top-1/2 transform -translate-y-1/2 sm:w-[650px] sm:h-96 overflow-hidden w-[300px] h-full  
+    @apply absolute top-1/2 transform -translate-y-1/2 md:w-[450px] xl:w-[650px] sm:h-96 overflow-hidden w-[300px] h-full  
 }
 
 .box-info .list-info {
@@ -153,19 +162,19 @@ a {
   justify-content: center;
   color: #fff;
   height: 250px; */
-  @apply flex flex-col justify-center text-white sm:h-96 h-screen 
+  @apply flex flex-col justify-center text-zinc-600 sm:h-96 h-screen 
 }
 
 .info h2 {
   /* font-size: 50px;
   line-height: 1; */
-  @apply sm:text-4xl text-xl 
+  @apply sm:text-4xl text-xl font-bold
 }
 
 .info p {
   /* font-size: 16px;
   margin: 20px 0; */
-  @apply text-base sm:my-5 my-16
+  @apply text-base sm:my-5 my-10
 }
 
 .info .btn {
@@ -181,7 +190,7 @@ a {
   font-size: 16px;
   color: #fff;
   font-weight: 600; */
-  @apply inline-flex justify-center items-center sm:w-60 sm:h-20 h-10 bg-transparent border-2 border-white rounded-full shadow-md text-white sm:font-semibold
+  @apply inline-flex justify-center items-center sm:w-60 sm:h-20 h-10 bg-transparent border-2 border-white rounded-full shadow-md text-zinc-50 sm:text-base font-extrabold hover:bg-[rgba(0,0,0,0.3)] hover:text-black
 }
 
 .carousel .list-img {
@@ -198,17 +207,19 @@ a {
 }
 
 .item img {
-  position: absolute;
+  /* position: absolute;
   right: 0;
   pointer-events: none;
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1)); */
+    @apply absolute right-0 pointer-events-none filter h-[70vh]
 }
 
 .navigation {
-  position: absolute;
+  /* position: absolute;
   bottom: 7%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%); */
+  @apply absolute bottom-7 left-1/2 transform -translate-x-1/2
 }
 
 .navigation span {

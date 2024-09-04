@@ -59,6 +59,8 @@ const generateLable = (name:string) => {
     case "primary":
       if(root.value?.category === "Measurements"){
         return () => generateRouterLabel("measurements", name, undefined, {name})
+      }else if(root.value?.category === "Workflow"){
+        return () => generateRouterLabel("workflow", name, undefined, {name})
       }
       break;
     default:

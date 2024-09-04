@@ -2,6 +2,7 @@ import dicomParser from "dicom-parser";
 import {IObservationValue} from "@/models";
 import type { FormItemRule} from 'naive-ui';
 import { format } from 'date-fns';
+import yaml from 'js-yaml';
 
 
 export const readDicom = (fileHandle: FileSystemFileHandle): Promise<any> => {
@@ -19,6 +20,33 @@ export const readDicom = (fileHandle: FileSystemFileHandle): Promise<any> => {
         } catch (error) {
             reject(`Error reading DICOM file: ${error}`);
             throw new Error(`Error reading DICOM file: ${error}`);
+        }
+    });
+}
+
+export const readCWL = (fileHandle: FileSystemFileHandle): Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Obtain a File object from FileSystemFileHandle
+            let data;
+            const file = await fileHandle.getFile();
+            const text = await file.text(); // Read file as text
+            // const data = JSON.parse(text);
+            try {
+                data = JSON.parse(text);
+              } catch (jsonError) {
+                // If JSON parsing fails, try parsing as YAML
+                try {
+                  data = yaml.load(text);
+                } catch (yamlError) {
+                  throw new Error('Error parsing YAML file: ' + yamlError);
+                }
+              }
+              
+            resolve(data);
+        } catch (error) {
+            reject(`Error reading CWL file: ${error}`);
+            throw new Error(`Error reading CWL file: ${error}`);
         }
     });
 }

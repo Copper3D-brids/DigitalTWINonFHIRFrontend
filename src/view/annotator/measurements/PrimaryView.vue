@@ -1,14 +1,10 @@
 <template>
-   <PageSummary :breadcrumbs="breadcrumbs" :avatar="logo" title="Annotator" subtitle="Add clinic descriptions for patients" footer="© 2024 Clinic Description Annotator">
+
+   <AnnotatorPageSummary :title="'Measurements Annotator'" :avatar="logo" :annotator="annotator" subtitle="Add clinic descriptions for patients" @updateAnnotator="onHandleAnnotator">
       <n-statistic label="Number of patients" :value="patientsDirectoryHandle?.children.length" />
       <n-statistic label="Number of samples" :value="samples" />
       <n-statistic label="Number of dicoms" :value="dicoms" />
-      <template #extra>
-        <n-space>
-        <n-button strong ghost class="w-[100px]" :color="annotator==='Annotate'?'#ff69b4':'#22c55e'" @click="onHandleAnnotator">{{ annotator }}</n-button>
-      </n-space>
-      </template>
-   </PageSummary>
+   </AnnotatorPageSummary>
 
    <div v-show="annotator==='Annotate'? false : true">
     <div class="p-3 m-3">
@@ -73,7 +69,8 @@
 import { ref, onMounted, watch, CSSProperties} from "vue";
 
 import { useRoute, useRouter } from 'vue-router';
-import PageSummary from "@/components/PageSummary.vue";
+import AnnotatorPageSummary from "../components/AnnotatorPageSummary.vue";
+
 import FormTab from "../components/FormTab.vue";
 import Observation from "../components/Observation.vue";
 import ImagingStudy from "../components/ImagingStudy.vue";
@@ -90,11 +87,12 @@ const route = useRoute();
 const router = useRouter();
 
 const filename = ref(route.query.name);
-const breadcrumbs = [root.value?.name, filename.value] as Array<string>;
+
 const patientsDirectoryHandle = ref<CustomFileSystemDirectoryHandle>();
 const samples = ref(0);
 const dicoms = ref(0);
 const annotator = ref("Annotate");
+
 const patients = ref<Array<string>>([]);
 
 const activeImagingDetailSwitchRef = ref(false)
@@ -126,7 +124,8 @@ const railStyle = ({
   return style
 }
 
-const onHandleAnnotator = () => {
+
+const onHandleAnnotator = (value: string) => {
   annotator.value === "Annotate" ? annotator.value = "Submit" : annotator.value = "Annotate";
 }
 

@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from "vue-router";
+import {createRouter, createWebHistory, createWebHashHistory} from "vue-router";
 import FHIRView from "../view/fhir/FHIRView.vue";
 import AppLayoutFHIR from '@/layout/AppLayoutFHIR.vue';
 import MeasurementsView from "@/view/fhir/measurements/MeasurementsView.vue";
@@ -12,7 +12,7 @@ import HomeView from "@/view/home/HomeView.vue";
 import WorkflowView from "@/view/annotator/workflow/WorkflowView.vue";
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
     routes:[
         {
             path:"/",

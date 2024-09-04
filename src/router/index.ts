@@ -9,6 +9,7 @@ import Annotator from "@/view/annotator/index.vue";
 import PrimaryView from "@/view/annotator/measurements/PrimaryView.vue";
 import testaaa from "@/view/annotator/measurements/testaaa.vue";
 import HomeView from "@/view/home/HomeView.vue";
+import WorkflowView from "@/view/annotator/workflow/WorkflowView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,12 @@ const router = createRouter({
                     component: PrimaryView
                 },
                 {
+                    // path:"/annotator/:name",
+                    path:"/workflow",
+                    name:"workflow",
+                    component: WorkflowView
+                },
+                {
                     path:"/primary/test",
                     name:"annotatortest",
                     component: testaaa
@@ -68,7 +75,13 @@ const router = createRouter({
                 ]
             }
         ]
-    }]
+    },
+    {
+        path: "/error",
+        name: "error",
+        component: () => import("@/view/error/index.vue")
+    }
+]
 })
 
 // @ts-ignore

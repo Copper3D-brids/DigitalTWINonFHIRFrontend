@@ -52,7 +52,7 @@
       @update:value="handleUpdateSwitchValue"
     >
     <template #checked>
-        Back to normal Measurements
+        Back to Normal Measurements
       </template>
       <template #unchecked>
         Show Measurements Details

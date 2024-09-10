@@ -23,7 +23,7 @@ const { root } = storeToRefs(useFolderPickerStore());
 const annotator = ref("Annotate");
 const goalCount = ref(0);
 const actionCount = ref(0);
-const workflowCwl = ref<any>();
+const workflowCwl = ref<any>(); 
 
 const workflowDirectoryHandle = ref<CustomFileSystemDirectoryHandle>();
 workflowDirectoryHandle.value = root.value?.children.filter((item: any) => item.name === filename.value)[0] as CustomFileSystemDirectoryHandle;

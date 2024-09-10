@@ -10,14 +10,28 @@ import PrimaryView from "@/view/annotator/measurements/PrimaryView.vue";
 import testaaa from "@/view/annotator/measurements/testaaa.vue";
 import HomeView from "@/view/home/HomeView.vue";
 import WorkflowView from "@/view/annotator/workflow/WorkflowView.vue";
+import LoginView from "@/view/home/LoginView.vue";
+import AppLayoutHome from "@/layout/AppLayoutHome.vue";
+import { decryptKey } from '@/view/home/components/utils';
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
     routes:[
         {
             path:"/",
-            name:"home",
-            component: HomeView
+            component: AppLayoutHome,
+            children:[
+                {
+                    path:"/",
+                    name:"home",
+                    component: HomeView,
+                },
+                {
+                    path:"/login",
+                    name:"login",
+                    component: LoginView
+                },
+            ]
         },
         {
             path:"/annotator",
@@ -56,11 +70,12 @@ const router = createRouter({
         {
         path:"/fhir",
         component: AppLayoutFHIR,
+        meta: { requiresAuth: true, requiresAdmin: true },
         children:[
             {
                 path:"/fhir",
                 name:"home-fhir",
-                component: FHIRView
+                component: FHIRView,
             },
             {
                 path:"/fhir/measurements",
@@ -85,6 +100,32 @@ const router = createRouter({
 })
 
 // @ts-ignore
+router.beforeEach((to, from, next) => {
+    let isAuthenticated = false;
+    let userRole = '';
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        const localData = typeof window !== "undefined" ? window.localStorage.getItem('adminAccessKey') : null;
+        isAuthenticated = localData !== null;
+
+        if(!!localData) {
+            const decryptedData = decryptKey(localData);
+            userRole = decryptedData.split('-')[0];
+        }
+
+        if (!isAuthenticated) {
+            console.log('not authenticated');
+            next({ name: 'login' });
+        } else if (to.matched.some(record => record.meta.requiresAdmin) && userRole !== 'admin') {
+            console.log('not admin');
+            next({ name: 'login' });
+        } else {
+            next();
+        }
+    } else {
+      next(); 
+    }
+  });
+
 // router.beforeEach((to, from, next) => {
 //     const lastRoute = localStorage.getItem('lastRoute')
 //     if (lastRoute && lastRoute.startsWith('/primary') && to.path.startsWith('/primary')) {

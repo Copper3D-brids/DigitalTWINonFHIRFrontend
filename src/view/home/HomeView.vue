@@ -1,9 +1,5 @@
 <template>
-    <div class="fixed z-10 top-0 left-0 right-0 h-[8vh] pt-3 px-3 shadow-sm">
-        <app-layout-header/>
-    </div>
-    <!-- bg-gradient-to-r from-zinc-100 to-neutral-500 -->
-    <div class="fixed flex flex-col py-16 md:flex-row inset-0 w-svw h-svh bg-fancy-gradient " >
+    <div class="flex flex-col py-16 md:flex-row inset-0 w-svw h-svh">
         <div class="flex flex-col flex-1">
             <div class="flex-1 flex justify-center items-center">
                 <WaterCard :to="'/annotator'" :title="'Annotator'" :class="'rounded-fancy-1'">
@@ -12,7 +8,7 @@
                 <!-- <RouterLink to="/annotator"> Annotator </RouterLink> -->
             </div>
             <div class="flex-1 flex justify-center items-center">
-                <WaterCard :to="'/fhir'" :header="'02'" :title="'DigitalTWINs'" :class="'rounded-fancy-2'" :color="'#01b4ff'">
+                <WaterCard :to="'/login'" :header="'02'" :title="'DigitalTWINs'" :class="'rounded-fancy-2'" :color="'#01b4ff'">
                     DigitalTWINs on FHIR
                 </WaterCard>
             </div>
@@ -22,21 +18,19 @@
             <div v-show="loaded" class="size-[32rem]">
                 <!-- <Spline :url="'https://prod.spline.design/ASj4N78ij3AVUK1T/scene.splinecode'" @loaded="handleSplineLoaded" :class="'rounded-3xl m-1 shadow-lg shadow-zinc-600'"/> -->
                 <!-- <Spline :url="'https://prod.spline.design/ASj4N78ij3AVUK1T/scene.splinecode'" @loaded="handleSplineLoaded" :class="'rounded-fancy-4 shadow-fancy hover:rounded-full transition-all duration-500 ease-in-out'"/> -->
-                 <!-- Nice track -->
+                    <!-- Nice track -->
                 <!-- <Spline :url="'https://prod.spline.design/FVZWbQH2B6ndj9UU/scene.splinecode'" @loaded="handleSplineLoaded" :class="'rounded-fancy-4 shadow-fancy-2 hover:rounded-full transition-all duration-500 ease-in-out'"/>  -->
                 <Spline :url="'https://prod.spline.design/82UMsxlOWfp8t2zQ/scene.splinecode'" @loaded="handleSplineLoaded" :class="'rounded-fancy-4 shadow-fancy-2 hover:rounded-full transition-all duration-500 ease-in-out'"/> 
-                
             </div>
         </div> 
     </div>
-    
 </template>
 
 
 <script setup lang="ts">
 import Spline from '@/components/Spline.vue';
 import WaterCard from '@/components/WaterCard.vue';
-import AppLayoutHeader from '@/layout/AppLayoutHeader.vue';
+
 import { Application } from '@splinetool/runtime';
 import { ref, onMounted, onUnmounted } from 'vue';
 

@@ -30,6 +30,43 @@ export interface IPatient {
     [key:string]: any;
 }
 
+export interface IResearchStudy {
+    resourceType:"ResearchStudy";
+    id:string;
+    identifier:IIdentifier[];
+    [key:string]: any;
+}
+
+export interface IPractitioner {
+    resourceType:"Practitioner";
+    id:string;
+    identifier:IIdentifier[];
+    name: IHumanName[] | null;
+    [key:string]: any;
+}
+
+export interface Workflow {
+    resourceType:"PlanDefinition";
+    id:string;
+    identifier:IIdentifier[];
+    [key:string]: any;
+}
+
+export interface WorkflowTool {
+    resourceType:"ActivityDefinition";
+    id:string;
+    identifier:IIdentifier[];
+    [key:string]: any;
+}
+
+export interface IOverall {
+    "datasets": Array<IResearchStudy>,
+    "practitioners": Array<IPractitioner>,
+    "patients": Array<IPatient>,
+    "workflows": Array<Workflow>,
+    "workflow_tools": Array<WorkflowTool>,
+}
+
 export interface IObservationValueQuantity {
     value: number|"";
     comparator?: "<" | "<=" | ">=" | ">" | "";

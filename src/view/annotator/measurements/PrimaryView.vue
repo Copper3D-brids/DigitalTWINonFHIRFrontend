@@ -52,7 +52,7 @@
       @update:value="handleUpdateSwitchValue"
     >
     <template #checked>
-        Back to normal Measurements
+        Back to Normal Measurements
       </template>
       <template #unchecked>
         Show Measurements Details
@@ -74,7 +74,7 @@ import AnnotatorPageSummary from "../components/AnnotatorPageSummary.vue";
 import FormTab from "../components/FormTab.vue";
 import Observation from "../components/Observation.vue";
 import ImagingStudy from "../components/ImagingStudy.vue";
-import { NStatistic, NButton, NSpace, NCheckbox, NCheckboxGroup, NH3, NH6, NDivider, NSwitch} from 'naive-ui';
+import { NStatistic, NCheckbox, NCheckboxGroup, NH3, NH6, NDivider, NSwitch} from 'naive-ui';
 import {useFolderPickerStore} from "@/components/composables/folderpicker";
 import { storeToRefs } from "pinia";
 import { IAnnotatorDescription, IAnnotatorImagingStudySeries, IAnnotatorFormDescription, IAnnotatorImagingStudy} from "@/models";

@@ -12,6 +12,8 @@ yarn dev
 - create a `.env` file in root folder
 
 ```
+VITE_ADMIN_PASSKEY = your_admin_passkey
+VITE_API_URL = your_backend_server_api_url
 ```
 
 

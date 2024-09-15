@@ -1,10 +1,10 @@
 <template>
-    <div class="flex-1 flex flex-col justify-evenly ">
+    <div class="flex-1 flex flex-col justify-evenly">
         <div class="ml-10">
             <h1 class="text-lg font-semibold">Admin Access Verification</h1>
             <p>To access the admin page, please enter the passkey.</p>
         </div>
-        <div class="flex justify-center items-center ">
+        <div class="flex justify-center items-center md:h-1/2">
             <OTPPad :length="6" :error-message="errorMesage" @entered="validatePasskey"/>
         </div>
     </div>

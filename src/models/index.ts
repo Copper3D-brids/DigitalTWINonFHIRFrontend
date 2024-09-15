@@ -16,8 +16,8 @@ export interface IReference {
 
 export interface IHumanName {
     text: string | null;
-    family:string[] | null;
-    given: string | null;
+    family:string | null;
+    given: string[] | null;
     [key:string]: any;
 }
 
@@ -34,6 +34,9 @@ export interface IResearchStudy {
     resourceType:"ResearchStudy";
     id:string;
     identifier:IIdentifier[];
+    title: string;
+    status: string;
+    principalInvestigator: IReference;
     [key:string]: any;
 }
 
@@ -42,13 +45,42 @@ export interface IPractitioner {
     id:string;
     identifier:IIdentifier[];
     name: IHumanName[] | null;
+    gender?: string;
     [key:string]: any;
 }
 
+export interface ICode {
+    system?: string;
+    value?: string;
+    display?: string;
+    [key:string]: any;
+}
+export interface ICoding {
+    coding?: ICode[];
+    text?: string;
+} 
+interface IWorkflowAction{
+    title:string;
+    description:string;
+    input: Array<{type:string}>;
+    output: Array<{type:string, codeFilter: Array<{code: ICoding}>}>;
+    definitionCanonical: string;
+    [key:string]: any;
+}
 export interface Workflow {
     resourceType:"PlanDefinition";
     id:string;
+    version:string;
     identifier:IIdentifier[];
+    title:string;
+    status:string;
+    description:string;
+    date:string;
+    author: Array<{name:string}>;
+    action: Array<IWorkflowAction>;
+    purpose?:string;
+    usage?:string;
+    goal?: Array<{description:ICoding}>;
     [key:string]: any;
 }
 
@@ -56,15 +88,21 @@ export interface WorkflowTool {
     resourceType:"ActivityDefinition";
     id:string;
     identifier:IIdentifier[];
+    verison:string;
+    name:string;
+    title?:string;
+    status:string;
+    description?:string;
     [key:string]: any;
 }
 
 export interface IOverall {
-    "datasets": Array<IResearchStudy>,
-    "practitioners": Array<IPractitioner>,
-    "patients": Array<IPatient>,
-    "workflows": Array<Workflow>,
-    "workflow_tools": Array<WorkflowTool>,
+    datasets: Array<IResearchStudy>,
+    researchers: Array<IPractitioner>,
+    patients: Array<IPatient>,
+    workflows: Array<Workflow>,
+    workflow_tools: Array<WorkflowTool>,
+    [key:string]: any;
 }
 
 export interface IObservationValueQuantity {

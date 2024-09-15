@@ -8,9 +8,12 @@ export function registerPlugins(app: App){
     // loadFonts();
     app.use(router).use(pinia);
 
-    app.config.errorHandler = (err, instance, info) => {
+    app.config.errorHandler = (err: any, instance, info) => {
+        if (err.isAxiosError) {
+            console.log('Axios Error:', err);
+            return;
+          }
         console.error('Global Error:', err, info);
-        console.log('Instance:', instance);
         
         // Redirect to the error page or homepage
         router.push('/error');

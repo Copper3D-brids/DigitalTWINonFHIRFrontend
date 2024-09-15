@@ -4,7 +4,8 @@ import { IPatient, IRequests, IOverall } from "@/models";
 
 import { 
     usePatientsInfo, 
-    useOverallInfo
+    useOverallInfo,
+    usePatientDetails
 } from "../plugins/api";
 
 export const usePatientsInfoStore = defineStore("patientsInfo", () => {
@@ -28,5 +29,17 @@ export const useOverallInfoStore = defineStore("overallInfo", () => {
     return {
         overall,
         getOverall
+    }
+})
+
+export const usePatientDetailsStore = defineStore("patientDetails", () => {
+    const patientDetails = ref<any>();
+    const getpatientDetails = async (uuid: string) => {
+        patientDetails.value = await usePatientDetails(uuid);
+    };
+
+    return {
+        patientDetails,
+        getpatientDetails
     }
 })

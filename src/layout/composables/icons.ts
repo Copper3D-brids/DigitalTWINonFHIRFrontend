@@ -18,7 +18,11 @@ import {
     RemoveOutline as RemoveIcon,
     ChevronBackOutline as ChevronBackIcon,
     ChevronForwardOutline as ChevronForwardIcon,
-    PlanetOutline as PlanetIcon
+    PlanetOutline as PlanetIcon,
+    PinOutline as PinIcon,
+    FlameOutline as FlameIcon,
+    FlashOutline as FlashIcon,
+    FootstepsOutline as FootStepsIcon,
   } from '@vicons/ionicons5';
 
 export function useIcons(){
@@ -42,6 +46,10 @@ export function useIcons(){
         RemoveIcon, 
         ChevronBackIcon,
         ChevronForwardIcon,
-        PlanetIcon
+        PlanetIcon,
+        PinIcon,
+        FlameIcon,
+        FlashIcon,
+        FootStepsIcon
     }
 }

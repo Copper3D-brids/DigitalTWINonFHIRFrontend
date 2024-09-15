@@ -1,8 +1,8 @@
 import {createRouter, createWebHistory, createWebHashHistory} from "vue-router";
-import FHIRView from "../view/admin-fhir/FHIRView.vue";
+import AdminFHIRView from "../view/fhir/admin-fhir/AdminFHIRView.vue";
 import AppLayoutFHIR from '@/layout/AppLayoutFHIR.vue';
-import MeasurementsView from "@/view/admin-fhir/measurements/MeasurementsView.vue";
-import Patients from "@/view/admin-fhir/measurements/Patients.vue";
+import MeasurementsView from "@/view/fhir/admin-fhir/measurements/MeasurementsView.vue";
+import Patients from "@/view/fhir/admin-fhir/measurements/Patients.vue";
 import AppLayoutAnnotator from "@/layout/AppLayoutAnnotator.vue";
 import AnnotatorView from "@/view/annotator/AnnotatorView.vue";
 import Annotator from "@/view/annotator/index.vue";
@@ -12,6 +12,7 @@ import HomeView from "@/view/home/HomeView.vue";
 import WorkflowView from "@/view/annotator/workflow/WorkflowView.vue";
 import LoginView from "@/view/home/LoginView.vue";
 import AppLayoutHome from "@/layout/AppLayoutHome.vue";
+import FHIRResource from "@/view/fhir/user-fhir/index.vue";
 import { decryptKey } from '@/view/home/components/utils';
 
 const router = createRouter({
@@ -68,35 +69,41 @@ const router = createRouter({
             ]
         },
         {
-        path:"/admin-fhir",
-        component: AppLayoutFHIR,
-        meta: { requiresAuth: true, requiresAdmin: true },
-        children:[
-            {
-                path:"/admin-fhir",
-                name:"admin-home-fhir",
-                component: FHIRView,
-            },
-            {
-                path:"/admin-fhir/measurements",
-                name:"admin-fhir-measurements",
-                component: MeasurementsView,
-                children:[
-                    {
-                        path:"/admin-fhir/measurements/patients",
-                        name:"admin-fhir-patients",
-                        component: Patients
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        path: "/error",
-        name: "error",
-        component: () => import("@/view/error/index.vue")
-    }
-]
+            path:"/admin-fhir",
+            component: AppLayoutFHIR,
+            meta: { requiresAuth: true, requiresAdmin: true },
+            children:[
+                {
+                    path:"/admin-fhir",
+                    name:"admin-home-fhir",
+                    component: AdminFHIRView,
+                },
+                {
+                    path:"/admin-fhir/measurements",
+                    name:"admin-fhir-measurements",
+                    component: MeasurementsView,
+                    children:[
+                        {
+                            path:"/admin-fhir/measurements/patients",
+                            name:"admin-fhir-patients",
+                            component: Patients
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            path:"/fhir-details",
+            name:"fhir-details",
+            component: FHIRResource,
+
+        },
+        {
+            path: "/error",
+            name: "error",
+            component: () => import("@/view/error/index.vue")
+        }
+    ]
 })
 
 // @ts-ignore

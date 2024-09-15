@@ -33,34 +33,23 @@ import WaterCard from '@/components/WaterCard.vue';
 
 import { Application } from '@splinetool/runtime';
 import { ref, onMounted, onUnmounted } from 'vue';
+import { updateScreenSize } from '@/plugins/utils';
 
 const loaded = ref(false);
 
 const screenSize = ref('')
 
-const updateScreenSize = () => {
-    if (window.matchMedia('(min-width: 1920px)').matches) {
-        screenSize.value = '3xl'
-    }else if (window.matchMedia('(min-width: 1536px)').matches) {
-        screenSize.value = '2xl'
-    } else if (window.matchMedia('(min-width: 1280px)').matches) {
-        screenSize.value = 'xl'
-    } else if (window.matchMedia('(min-width: 1024px)').matches) {
-        screenSize.value = 'lg'
-    } else if (window.matchMedia('(min-width: 768px)').matches) {
-        screenSize.value = 'md'
-    } else {
-        screenSize.value = 'sm'
-    }
+const handleScreenUpdate = () => {
+    screenSize.value = updateScreenSize();
 }
 
 onMounted(() => {
-  updateScreenSize()
-  window.addEventListener('resize', updateScreenSize)
+    handleScreenUpdate()
+    window.addEventListener('resize', handleScreenUpdate)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', updateScreenSize)
+    window.removeEventListener('resize', handleScreenUpdate)
 })
 
 

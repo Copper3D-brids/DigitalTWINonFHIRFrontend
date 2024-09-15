@@ -10,7 +10,7 @@
         
         <app-layout-sider :menu-options="menuOptions" :collapsed="true"/>
 
-      <n-layout content-style="padding: 10px 50px;" :native-scrollbar="false">
+      <n-layout class="p-2 md:p-10" :native-scrollbar="false">
         <router-view></router-view>
       </n-layout>
 

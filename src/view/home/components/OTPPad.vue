@@ -1,7 +1,7 @@
 <template>
     
-    <div class="flex flex-col justify-around gap-3">
-        <div ref="container" class="flex gap-4 items-center flex-wrap">
+    <div class="flex flex-col justify-evenly h-full gap-3">
+        <div ref="container" class="flex gap-4 items-center justify-center flex-wrap">
             <input v-for="n in length" :key="n" 
             @keyup="(e) => handleEnter(e, n-1)"
             v-model="otpArr[n-1]" type="text" maxlength="1" class="border-4 border-gray-300 shadow-sm focus:border-zinc-400 focus:outline-none rounded-md size-14 xl:size-20 font-extrabold text-2xl p-2 text-center caret-transparent"/>

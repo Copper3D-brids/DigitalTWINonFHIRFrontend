@@ -23,7 +23,7 @@ import { reactive, toRefs} from "vue";
 
 
 type Props = {
-  width: number,
+  width?: number,
   menuOptions: any[],
   collapsed: boolean
 };

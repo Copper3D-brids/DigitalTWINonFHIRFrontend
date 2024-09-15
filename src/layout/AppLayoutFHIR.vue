@@ -8,7 +8,7 @@
 
     <n-layout position="absolute" style="top: 8vh; bottom: 5vh" has-sider @dragover.prevent @drop="(e)=>e.preventDefault()">
         
-        <app-layout-sider :menu-options="menuOptions"/>
+        <app-layout-sider :menu-options="menuOptions" :collapsed="true"/>
 
       <n-layout content-style="padding: 10px 50px;" :native-scrollbar="false">
         <router-view></router-view>
@@ -37,25 +37,30 @@ import { useIcons } from '@/layout/composables/icons';
 
 
 const { renderIcon, generateRouterLabel } = useLayout();
-const {CogIcon, LaptopIcon, GameControllerIcon, RocketIcon, LibraryIcon,} = useIcons();
+const {CogIcon, LaptopIcon, GameControllerIcon, RocketIcon, LibraryIcon, PlanetIcon} = useIcons();
 
 
 
 const menuOptions = [
   {
+    label: () => generateRouterLabel("admin-home-fhir", "Home"),
+    key: 'admin',
+    icon: renderIcon(PlanetIcon)
+  },
+  {
     // label: () => generateRouterLabel("home-fhir", "Home"),
     label: () => generateRouterLabel("index-annotator", "Go Annotator"),
-    key: 'overall',
+    key: 'annotator',
     icon: renderIcon(LaptopIcon)
   },
   {
-    label: () => generateRouterLabel("fhir-measurements", "Measurements"),
+    label: () => generateRouterLabel("admin-fhir-measurements", "Measurements"),
     key: 'primary-measurements',
     disabled: false,
     icon: renderIcon(LibraryIcon),
     children: [
         {
-          label: () => generateRouterLabel("fhir-patients", "Patients"),
+          label: () => generateRouterLabel("admin-fhir-patients", "Patients"),
           key: 'patients',
           icon: renderIcon(CogIcon),
         },

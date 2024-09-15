@@ -17,7 +17,8 @@ import {
     CloseOutline as CloseIcon,
     RemoveOutline as RemoveIcon,
     ChevronBackOutline as ChevronBackIcon,
-    ChevronForwardOutline as ChevronForwardIcon
+    ChevronForwardOutline as ChevronForwardIcon,
+    PlanetOutline as PlanetIcon
   } from '@vicons/ionicons5';
 
 export function useIcons(){
@@ -40,6 +41,7 @@ export function useIcons(){
         CloseIcon,
         RemoveIcon, 
         ChevronBackIcon,
-        ChevronForwardIcon
+        ChevronForwardIcon,
+        PlanetIcon
     }
 }

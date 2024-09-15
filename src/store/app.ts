@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { IPatient, IRequests } from "@/models";
+import { IPatient, IRequests, IOverall } from "@/models";
 
 import { 
-    usePatientsInfo 
+    usePatientsInfo, 
+    useOverallInfo
 } from "../plugins/api";
 
 export const usePatientsInfoStore = defineStore("patientsInfo", () => {
@@ -15,5 +16,17 @@ export const usePatientsInfoStore = defineStore("patientsInfo", () => {
     return {
         patients,
         getPatients
+    }
+})
+
+export const useOverallInfoStore = defineStore("overallInfo", () => {
+    const overall = ref<IOverall>();
+    const getOverall = async () => {
+        overall.value = await useOverallInfo();
+    };
+
+    return {
+        overall,
+        getOverall
     }
 })

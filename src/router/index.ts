@@ -1,8 +1,8 @@
 import {createRouter, createWebHistory, createWebHashHistory} from "vue-router";
-import FHIRView from "../view/fhir/FHIRView.vue";
+import FHIRView from "../view/admin-fhir/FHIRView.vue";
 import AppLayoutFHIR from '@/layout/AppLayoutFHIR.vue';
-import MeasurementsView from "@/view/fhir/measurements/MeasurementsView.vue";
-import Patients from "@/view/fhir/measurements/Patients.vue";
+import MeasurementsView from "@/view/admin-fhir/measurements/MeasurementsView.vue";
+import Patients from "@/view/admin-fhir/measurements/Patients.vue";
 import AppLayoutAnnotator from "@/layout/AppLayoutAnnotator.vue";
 import AnnotatorView from "@/view/annotator/AnnotatorView.vue";
 import Annotator from "@/view/annotator/index.vue";
@@ -68,23 +68,23 @@ const router = createRouter({
             ]
         },
         {
-        path:"/fhir",
+        path:"/admin-fhir",
         component: AppLayoutFHIR,
         meta: { requiresAuth: true, requiresAdmin: true },
         children:[
             {
-                path:"/fhir",
-                name:"home-fhir",
+                path:"/admin-fhir",
+                name:"admin-home-fhir",
                 component: FHIRView,
             },
             {
-                path:"/fhir/measurements",
-                name:"fhir-measurements",
+                path:"/admin-fhir/measurements",
+                name:"admin-fhir-measurements",
                 component: MeasurementsView,
                 children:[
                     {
-                        path:"/fhir/measurements/patients",
-                        name:"fhir-patients",
+                        path:"/admin-fhir/measurements/patients",
+                        name:"admin-fhir-patients",
                         component: Patients
                     }
                 ]
@@ -105,15 +105,20 @@ router.beforeEach((to, from, next) => {
     let userRole = '';
     if (to.matched.some(record => record.meta.requiresAuth)) {
         const localData = typeof window !== "undefined" ? window.localStorage.getItem('adminAccessKey') : null;
-        isAuthenticated = localData !== null;
 
         if(!!localData) {
             const decryptedData = decryptKey(localData);
-            userRole = decryptedData.split('-')[0];
-        }
+            const timestamp = decryptedData.split('-')[2];
+            const diff = Date.now() - parseInt(timestamp);
+            if(diff < 1000 * 60 * 30){
+                isAuthenticated = true;
+                userRole = decryptedData.split('-')[0];
+            }else{
+                localStorage.removeItem('accessKey');
+            }
 
+        }
         if (!isAuthenticated) {
-            console.log('not authenticated');
             next({ name: 'login' });
         } else if (to.matched.some(record => record.meta.requiresAdmin) && userRole !== 'admin') {
             console.log('not admin');

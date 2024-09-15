@@ -7,6 +7,7 @@
         bordered
         show-trigger="bar"
         class="bg-transparent shadow-sm"
+        :default-collapsed="p.collapsed"
     >
         <n-menu
             :collapsed-width="64"
@@ -23,12 +24,14 @@ import { reactive, toRefs} from "vue";
 
 type Props = {
   width: number,
-  menuOptions: any[]
+  menuOptions: any[],
+  collapsed: boolean
 };
 
 let p = withDefaults(defineProps<Props>(), {
   width:240,
-  menuOptions: () => [] 
+  menuOptions: () => [],
+  collapsed: false
 });
 const state = reactive(p);
 const { menuOptions, width } = toRefs(state);

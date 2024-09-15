@@ -17,8 +17,8 @@ import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { encryptKey, decryptKey} from './utils';
 
+const adminPasskey = import.meta.env.VITE_ADMIN_PASSKEY;
 
-const adminPasskey = '123456';
 const encryptedKey = ref<string | null>('');
 const localData = typeof window !== "undefined" ? window.localStorage.getItem('adminAccessKey') : null;
 const errorMesage = ref<string>('');
@@ -26,7 +26,6 @@ const router = useRouter();
 
 if(!!localData){
     const decryptedData = decryptKey(localData);
-    console.log(decryptedData);
     const [role, key, timestamp] = decryptedData.split('-');
     if(role === 'admin'){
         const diff = Date.now() - parseInt(timestamp);
@@ -42,7 +41,7 @@ watchEffect(() => {
     if(encryptedKey.value){
         const decryptedKey = decryptKey(encryptedKey.value);
         if(decryptedKey === adminPasskey){
-            router.push('/fhir');
+            router.push('/admin-fhir');
         }
     }
 })

@@ -1,7 +1,7 @@
 <template>
     <div>
        <div v-if="resourceType==='Patient'">
-           <PatientDetail :uuid="uuid" :resource="resource"/>
+           <PatientDetail :uuid="uuid"/>
         </div>
     </div>
 </template>
@@ -12,7 +12,7 @@ import PatientDetail from './PatientDetail.vue';
 
 const route = useRoute()
 
-const resource = JSON.parse(decodeURIComponent(route.query.resource || '{}'))
+const resource = JSON.parse(decodeURIComponent(route.query.resource as string || '{}'))
 const uuid = route.query.uuid as string;
 const resourceType = route.query.resourceType as string;
 

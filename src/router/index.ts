@@ -79,6 +79,11 @@ const router = createRouter({
                     component: AdminFHIRView,
                 },
                 {
+                    path:"/fhir-details",
+                    name:"fhir-details",
+                    component: FHIRResource,
+                },
+                {
                     path:"/admin-fhir/measurements",
                     name:"admin-fhir-measurements",
                     component: MeasurementsView,
@@ -91,12 +96,6 @@ const router = createRouter({
                     ]
                 }
             ]
-        },
-        {
-            path:"/fhir-details",
-            name:"fhir-details",
-            component: FHIRResource,
-
         },
         {
             path: "/error",

@@ -56,8 +56,11 @@ export interface ICode {
     [key:string]: any;
 }
 export interface ICoding {
-    coding?: ICode[];
-    text?: string;
+    code?: ICode[];
+    system?: string;
+    version?: string;
+    display?: string;
+    userSelected?: boolean;	
 } 
 interface IWorkflowAction{
     title:string;
@@ -67,7 +70,7 @@ interface IWorkflowAction{
     definitionCanonical: string;
     [key:string]: any;
 }
-export interface Workflow {
+export interface IWorkflow {
     resourceType:"PlanDefinition";
     id:string;
     version:string;
@@ -84,7 +87,7 @@ export interface Workflow {
     [key:string]: any;
 }
 
-export interface WorkflowTool {
+export interface IWorkflowTool {
     resourceType:"ActivityDefinition";
     id:string;
     identifier:IIdentifier[];
@@ -100,8 +103,8 @@ export interface IOverall {
     datasets: Array<IResearchStudy>,
     researchers: Array<IPractitioner>,
     patients: Array<IPatient>,
-    workflows: Array<Workflow>,
-    workflow_tools: Array<WorkflowTool>,
+    workflows: Array<IWorkflow>,
+    workflow_tools: Array<IWorkflowTool>,
     [key:string]: any;
 }
 
@@ -147,7 +150,7 @@ export interface IObservationValuePeriod {
     end: string;
 }
 
-export interface IObservationValue{
+export interface IObservationValue {
     valueQuantity?: IObservationValueQuantity;
     valueCodeableConcept?: IObservationValueCodeableConcept;
     valueString?: string;
@@ -244,4 +247,103 @@ export interface IAnnotatorFormDescription {
 
 export interface ISelectedPatientsSamples {
     [key:string]: Array<string>;
+}
+
+export interface ICodeableConcept {
+    coding: Array<ICoding>;
+    text: string;
+}
+
+export interface IConsent {
+    resourceType: "Consent";
+    id: string;
+    identifier: IIdentifier[];
+    scope: ICodeableConcept;
+    category: Array<ICodeableConcept>;
+    patient: IReference;
+    performer: Array<IReference>;
+    [key:string]: any;
+}
+
+export interface IObservation extends IObservationValue{
+    resourceType: "Observation";
+    id: string;
+    identifier: IIdentifier[];
+    status: string;
+    code: ICodeableConcept;
+    subject: IReference;
+    [key:string]: any;
+}
+
+export interface IImagingStudySeriesInstance {
+    uid: string;
+    sopClass: {
+        system: string;
+        code: string;
+        display: string;
+    };
+    number: string|number;
+    [key:string]: any;
+}
+
+export interface IImagingStudySeries {
+    uid: string;
+    numberOfInstances: number;
+    modality: {
+        system: string;
+        code: string;
+        display: string;
+    };
+    endpoint: IReference[]
+    bodySite: {
+        system: string;
+        code: string;
+        display: string;
+    };
+    instance: Array<IImagingStudySeriesInstance>;
+    [key:string]: any;
+}
+
+export interface IImagingStudy {
+    resourceType: "ImagingStudy";
+    id: string;
+    identifier: IIdentifier[];
+    status: string;
+    subject: IReference;
+    started: string;
+    referrer: IReference;
+    endpoint: Array<IReference>;
+    numberOfSeries: number;
+    numberOfInstances: number;
+    series: Array<IImagingStudySeries>;
+    [key:string]: any;
+}
+
+export interface IWorkflowToolProcess {
+    resourceType: "Task";
+    id: string;
+    identifier: IIdentifier[];
+    basedOn: Array<IReference>;
+    status: string;
+    intent: string;
+    description: string;
+    focus: IReference;
+    input: Array<{type: ICodeableConcept, valueReference: IReference}>;
+    output: Array<{type: ICodeableConcept, valueReference: IReference}>;
+    [key:string]: any;
+}
+
+export interface IPatientDataset {
+    researchStudy: IResearchStudy;
+    relatedResources: {
+        researcher: IPractitioner;
+        consent: IConsent;
+        measurements: Array<IObservation|IImagingStudy>;
+        workflow_tool_processes: Array<IWorkflowToolProcess>;
+    } 
+}
+
+export interface IPatientDetails {
+    patient: IPatient;
+    datasets: Array<IPatientDataset>;
 }

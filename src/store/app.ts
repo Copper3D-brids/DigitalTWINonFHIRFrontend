@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { IPatient, IRequests, IOverall } from "@/models";
+import { IPatient, IPatientDetails, IOverall } from "@/models";
 
 import { 
     usePatientsInfo, 
@@ -33,7 +33,7 @@ export const useOverallInfoStore = defineStore("overallInfo", () => {
 })
 
 export const usePatientDetailsStore = defineStore("patientDetails", () => {
-    const patientDetails = ref<any>();
+    const patientDetails = ref<IPatientDetails>();
     const getpatientDetails = async (uuid: string) => {
         patientDetails.value = await usePatientDetails(uuid);
     };

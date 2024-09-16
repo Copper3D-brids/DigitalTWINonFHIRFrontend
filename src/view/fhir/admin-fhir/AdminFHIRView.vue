@@ -53,7 +53,8 @@
                     <template #action class=" p-0">
                         <div class=" cursor-pointer text-center">
                             <n-button type="info" size="large" class="rounded-md" >
-                                <router-link :to="{name: 'fhir-details', query: {resourceType: d.resourceType, uuid: d.uuid, resource: encodeURIComponent(JSON.stringify(d.value))}}">View Details</router-link>
+                                <!-- <router-link :to="{name: 'fhir-details', query: {resourceType: d.resourceType, uuid: d.uuid, resource: encodeURIComponent(JSON.stringify(d.value))}}">View Details</router-link> -->
+                                <router-link :to="{name: 'fhir-details', query: {resourceType: d.resourceType, uuid: d.uuid}}">View Details</router-link>
                             </n-button>
                         </div>
                     </template>
@@ -114,8 +115,7 @@ const displayData = computed(()=>{
     resourceData.forEach(resource => {
         let name = "";
         if (currentKey.value === 'patients' || currentKey.value === 'researchers') {
-            console.log(resource.name);
-            
+
             const family = !!resource.name[0].family ? resource.name[0].family : '';
             name = resource.name[0].given.join(' ') + ' ' + family;
         }else {

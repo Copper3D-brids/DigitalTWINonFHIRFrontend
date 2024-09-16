@@ -1,5 +1,5 @@
 import http from "./http";
-import { IPatient, IOverall } from "@/models";
+import { IPatient, IOverall, IPatientDetails } from "@/models";
 
 
 export async function usePatientsInfo() {
@@ -9,5 +9,10 @@ export async function usePatientsInfo() {
 
 export async function useOverallInfo() {
     const infos = http.get<IOverall>("/overall");
+    return infos;
+}
+
+export async function usePatientDetails(uuid: string) {
+    const infos = http.get<IPatientDetails>(`/patient/details/${uuid}`);
     return infos;
 }

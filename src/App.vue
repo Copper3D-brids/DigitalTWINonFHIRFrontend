@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { NMessageProvider } from 'naive-ui';
+import { NMessageProvider, NModalProvider } from 'naive-ui';
 </script>
 
 <template>
 <n-message-provider>
-    <RouterView />
+    <n-modal-provider>
+        <RouterView />
+    </n-modal-provider>
 </n-message-provider>
   
 </template>

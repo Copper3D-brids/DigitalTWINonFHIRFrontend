@@ -44,6 +44,13 @@ export default defineConfig({
   base: "/DigitalTWINonFHIRFrontend/",
   build: {
     outDir: "./build",
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
   },
   server: {
     host: "0.0.0.0",

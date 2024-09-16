@@ -1,6 +1,6 @@
 <template>
    
-   <div class="c_card_container">
+   <div class="c_card_container shadow-lg">
         <input type="radio" name="select" id="c_card_slide_1" checked hidden>
         <input type="radio" name="select" id="c_card_slide_2" hidden>
         <input type="radio" name="select" id="c_card_slide_3" hidden>
@@ -44,66 +44,52 @@ const props = defineProps<{ data: IData[] }>();
 
 </script>
 
-<style >
+<style scoped>
 
 .c_card_container{
     width: 100%;
     height: 100%;
     background-color: #fff;
     border-radius: 25px;
-    box-shadow: 0 10px 50px rgba(0,0,0,0.3);
     position: relative;
 }
 .c_card_detail{
     width: 100%;
     height: 100%;
     padding-left: 30px;
-    /* 绝对定位 */
     position: absolute;
-    /* 溢出隐藏 */
     overflow: hidden;
 }
 .c_card_detail .c_card_img{
-    /* min-width: 50px;
-    min-height: 50px; */
     width: 10rem;
     height: 10rem;
     border-radius: 1rem;
     overflow: hidden;
-    /* 防止被挤压 */
     flex-shrink: 0;
-    box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 10px rgba(0,0,0,0.2);
 }
 .c_card_detail .c_card_img img{
     width: 100%;
     height: 100%;
-    /* 图片默认隐藏 */
     opacity: 0;
-    /* 过渡效果 */
     transition: 0.6s;
 }
-/* 通过单选框的checked来显示指定图片 */
-/* ~是兄弟选择器 */
+
 #c_card_slide_1:checked ~ .c_card_detail-1 img,
 #c_card_slide_2:checked ~ .c_card_detail-2 img,
 #c_card_slide_3:checked ~ .c_card_detail-3 img{
-    /* 图片显示 */
     opacity: 1;
-    /* 过渡延迟 */
     transition-delay: 0.2s;
 }
 .c_card_detail .c_card_content{
     flex: 1;
     padding: 0 3rem;
     position: relative;
-    /* 默认偏右一点 */
     left: 2rem;
-    /* 文本内容默认隐藏 */
     opacity: 0;
-    /* 过渡效果 */
     transition: 0.6s;
 }
-/* 通过单选框的checked来显示指定文本内容 */
+
 #c_card_slide_1:checked ~ .c_card_detail-1 .c_card_content,
 #c_card_slide_2:checked ~ .c_card_detail-2 .c_card_content,
 #c_card_slide_3:checked ~ .c_card_detail-3 .c_card_content{
@@ -128,7 +114,7 @@ const props = defineProps<{ data: IData[] }>();
     max-height: 120px;
 }
 
-/* 指示器 */
+
 .c_card_slider{
     position: absolute;
     bottom: 25px;
@@ -147,7 +133,7 @@ const props = defineProps<{ data: IData[] }>();
     position: relative;
     overflow: hidden;
 }
-/* 指示器的黑色进度条 */
+
 .c_card_slider .c_card_slide::before {
     content: "";
     width: 0%;
@@ -161,7 +147,6 @@ const props = defineProps<{ data: IData[] }>();
     transform-origin: left;
     transition: transform 0.6s;
 }
-/* 通过单选框的checked来显示指定指示器的黑色进度条 */
 #c_card_slide_1:checked ~ .c_card_slider .c_card_slide-1::before,
 #c_card_slide_2:checked ~ .c_card_slider .c_card_slide-2::before,
 #c_card_slide_3:checked ~ .c_card_slider .c_card_slide-3::before{
@@ -172,7 +157,6 @@ const props = defineProps<{ data: IData[] }>();
 
 @media (max-width: 1200px) {
     .c_card_detail .c_card_img {
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         margin-top: 10px;
         width: 7rem;
         height: 7rem;

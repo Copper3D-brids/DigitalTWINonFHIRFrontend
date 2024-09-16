@@ -7,7 +7,7 @@
             </div>
         </div> 
         <div class="w-full h-full md:w-2/3 flex items-center justify-center ">
-            <div class="p-10 w-4/5 h-full md:h-2/3 xl:h-3/4 overflow-y-auto form-container shadow-lg">
+            <div class="p-10 w-4/5 h-4/5 md:h-2/3 xl:h-3/4 overflow-y-auto form-container shadow-lg">
                 <n-tabs default-value="signin" size="large" justify-content="space-evenly" class="flex h-full"> 
                     <n-tab-pane name="signin" tab="Sign in" class="flex h-full">
                         <Login />

@@ -74,11 +74,11 @@
         </div>
 
         <!-- Generate report -->
-         <div ref="reportDiv" v-show="showGenerateReport" class="mt-5">
+         <div ref="reportDiv" v-if="showGenerateReport" class="mt-5">
             <n-divider title-placement="left">
                 Generate Diagnostic Report for {{ patientDetails?.patient.name![0].text }}
             </n-divider>
-            <patient-report-step />
+            <patient-report-step :screen-size="screenSize"/>
          </div>
     </div>
 </template>
@@ -143,10 +143,20 @@ const columnsPageSize = computed(()=>{
                 {
                     title: 'Resource',
                     key: 'resource',
-                },
-                {
-                    title: 'Identifier',
-                    key: 'uuid',
+                    defaultFilterOptionValues: [],
+                    filterOptions: [
+                        {
+                            label: 'Observation',
+                            value: 'Observation'
+                        },
+                        {
+                            label: 'ImagingStudy',
+                            value: 'ImagingStudy'
+                        }
+                    ],
+                    filter(value:any, row:any) {
+                        return !!~row.resource.indexOf(String(value))
+                    }
                 },
                 {
                     title: 'Code',
@@ -194,10 +204,10 @@ const columnsPageSize = computed(()=>{
                     title: 'Resource',
                     key: 'resource',
                 },
-                {
-                    title: 'Identifier',
-                    key: 'uuid',
-                },
+                // {
+                //     title: 'Identifier',
+                //     key: 'uuid',
+                // },
                 {
                     title: 'Workflow',
                     key: 'workflow',

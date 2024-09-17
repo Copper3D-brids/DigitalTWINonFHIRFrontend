@@ -1,19 +1,23 @@
 <template>
-   <n-steps :current="current" :status="currentStatus">
-      <n-step title="I Me Mine">
+   <n-steps class="main p-2" :vertical="['md', 'lg', 'xl', '2xl', '3xl'].includes(screenSize)?false:true" :current="current" :status="currentStatus">
+      <n-step title="Select the dataset">
         <div class="n-step-description">
-          <p>Al through the day, I me mine I me mine, I me mine</p>
-          <n-button
-            v-if="current === 1"
-            :type="buttonType"
-            size="small"
-            @click="handleButtonClick"
-          >
-            Next
-          </n-button>
+            <div class="content">
+                <n-select v-model:value="singleValue" :options="datasetOptions" :disabled="current === 1 ? false : true"/>
+            </div>
+          {{ singleValue }}
+            <n-button
+                v-if="current === 1"
+                :type="buttonType"
+                size="small"
+                class="btn"
+                @click="handleButtonClick"
+            >
+                Next
+            </n-button>
         </div>
       </n-step>
-      <n-step title="Let It Be">
+      <n-step title="Select the primary measurements">
         <div class="n-step-description">
           <p>When I find myself in times of trouble Mother Mary comes to me</p>
           <n-button
@@ -53,29 +57,33 @@
         </div>
       </n-step>
     </n-steps>
-    <n-radio-group v-model:value="currentStatus" size="medium" name="basic">
-      <n-radio-button value="error">
-        Error
-      </n-radio-button>
-      <n-radio-button value="process">
-        Process
-      </n-radio-button>
-      <n-radio-button value="wait">
-        Wait
-      </n-radio-button>
-      <n-radio-button value="finish">
-        Finish
-      </n-radio-button>
-    </n-radio-group>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import type { StepsProps } from 'naive-ui'
-import { NSteps, NStep, NButton, NRadioGroup, NRadioButton } from 'naive-ui';
+import { NSteps, NStep, NButton, NRadioGroup, NRadioButton, NSelect } from 'naive-ui';
+
+defineProps({
+    screenSize: {
+        type: String,
+        default: 'md'
+    }
+})
 
 const current = ref(1)
 const currentStatus = ref<StepsProps['status']>('process')
+const singleValue = ref('Selecting...')
+const datasetOptions = [
+    {
+        label: 'Dataset 1',
+        value: 'uuid-1'
+    },
+    {
+        label: 'Dataset 2',
+        value: 'uuid-2'
+    },
+]
 
 const buttonType = computed(() => {
     switch (currentStatus.value) {
@@ -94,5 +102,20 @@ const handleButtonClick = () => {
 </script>
 
 <style scoped>
+@import '@/assets/css/google-front.css';
 
+.main {
+    font-family: 'Poppins', sans-serif;
+    overflow: auto;
+}
+
+.n-step-description {
+    @apply border border-gray-200 p-2 py-3 rounded-lg flex flex-col justify-between;
+}
+.content {
+    @apply my-3;
+}
+.btn {
+    @apply rounded-lg;
+}
 </style>

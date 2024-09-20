@@ -74,25 +74,33 @@
         </div>
 
         <!-- Generate report -->
-         <div ref="reportDiv" v-show="showGenerateReport" class="mt-5">
+         <div ref="reportDiv" v-if="showGenerateReport" class="mt-5">
             <n-divider title-placement="left">
                 Generate Diagnostic Report for {{ patientDetails?.patient.name![0].text }}
             </n-divider>
-            <patient-report-step />
+            <patient-report-step :screen-size="screenSize" :datasets="patientDetails?.datasets" @on-report-data="getReportData"/>
+         </div>
+         <!-- Report -->
+         <div v-if="!!reportData">
+            <patient-report :report-data="reportData" :patient-details="patientDetails"/>
          </div>
     </div>
 </template>
 
 <script setup lang="ts">
+
 import { usePatientDetailsStore } from '@/store/app';
 import { storeToRefs } from "pinia";
 import { onBeforeMount, computed, h, ref, onMounted, onUnmounted } from 'vue';
 import { NAvatar, NButton, NCollapse, NCollapseItem, NDataTable, NDivider } from 'naive-ui';
 import { updateScreenSize } from "@/plugins/utils";
-import { IPatient, IObservation, IImagingStudy, IWorkflowToolProcess } from '@/models';
+import { IPatient, IObservation, IImagingStudy, IWorkflowToolProcess, IPatientDataset, IWorkflowToolProcessDetails, ReportData } from '@/models';
 import ConsentModal from '../components/ConsentModal.vue';
 import PatientReportStep from '../components/PatientReportStep.vue';
 import patient_img from '@/assets/images/fhir/patient.svg';
+import PatientReport from '../components/PatientReport.vue';
+
+
 
 const props = defineProps<{
     uuid: string
@@ -105,6 +113,8 @@ const showGenerateReport = ref(false);
 const mainDiv = ref<HTMLDivElement|null>(null);
 const reportDiv = ref<HTMLDivElement>();
 
+const reportData = ref<ReportData>();
+
 const scrollTo = () => {
 showGenerateReport.value=!showGenerateReport.value;
 if(showGenerateReport.value){
@@ -115,6 +125,7 @@ if(showGenerateReport.value){
     mainDiv.value?.scrollIntoView({behavior: "smooth"});
 }
 };
+
 
 
 const handleScreenUpdate = () => {
@@ -134,6 +145,10 @@ onUnmounted(() => {
     window.removeEventListener('resize', handleScreenUpdate);
 })
 
+const getReportData = (data:ReportData) => {
+    reportData.value = data;
+}
+
 const columnsPageSize = computed(()=>{
     if(['md', 'lg', 'xl', '2xl', '3xl'].includes(screenSize.value)){
         return {
@@ -143,10 +158,20 @@ const columnsPageSize = computed(()=>{
                 {
                     title: 'Resource',
                     key: 'resource',
-                },
-                {
-                    title: 'Identifier',
-                    key: 'uuid',
+                    defaultFilterOptionValues: [],
+                    filterOptions: [
+                        {
+                            label: 'Observation',
+                            value: 'Observation'
+                        },
+                        {
+                            label: 'ImagingStudy',
+                            value: 'ImagingStudy'
+                        }
+                    ],
+                    filter(value:any, row:any) {
+                        return !!~row.resource.indexOf(String(value))
+                    }
                 },
                 {
                     title: 'Code',
@@ -194,10 +219,10 @@ const columnsPageSize = computed(()=>{
                     title: 'Resource',
                     key: 'resource',
                 },
-                {
-                    title: 'Identifier',
-                    key: 'uuid',
-                },
+                // {
+                //     title: 'Identifier',
+                //     key: 'uuid',
+                // },
                 {
                     title: 'Workflow',
                     key: 'workflow',
@@ -325,6 +350,8 @@ function createProcessData(process: Array<IWorkflowToolProcess>) {
 const handleRowClick = (row:any) => {
     console.log(row)
 }
+
+
 
 
 </script>

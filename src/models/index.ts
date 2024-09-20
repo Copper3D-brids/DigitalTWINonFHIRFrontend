@@ -328,6 +328,7 @@ export interface IWorkflowToolProcess {
     intent: string;
     description: string;
     focus: IReference;
+    lastModified: string;
     input: Array<{type: ICodeableConcept, valueReference: IReference}>;
     output: Array<{type: ICodeableConcept, valueReference: IReference}>;
     [key:string]: any;
@@ -347,3 +348,13 @@ export interface IPatientDetails {
     patient: IPatient;
     datasets: Array<IPatientDataset>;
 }
+
+export interface IWorkflowToolProcessDetails {
+    workflow: IWorkflow;
+    workflow_tool: IWorkflowTool;
+    workflow_tool_process: IWorkflowToolProcess;
+    input: Array<IImagingStudy | IObservation>;
+    output: Array<IObservation>;
+}
+
+export type ReportData = {dataset:IPatientDataset, measurements:Array<IObservation|IImagingStudy>, process:IWorkflowToolProcessDetails}

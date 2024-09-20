@@ -1,58 +1,53 @@
 <template>
    <n-steps class="main p-2" :vertical="['md', 'lg', 'xl', '2xl', '3xl'].includes(screenSize)?false:true" :current="current" :status="currentStatus">
-      <n-step title="Select the dataset">
+    <n-step v-for="(step, idx) in stepsData" :key="idx" :title="step.title">
         <div class="n-step-description">
-            <div class="content">
-                <n-select v-model:value="singleValue" :options="datasetOptions" :disabled="current === 1 ? false : true"/>
-            </div>
-          {{ singleValue }}
-            <n-button
-                v-if="current === 1"
-                :type="buttonType"
-                size="small"
-                class="btn"
-                @click="handleButtonClick"
-            >
-                Next
-            </n-button>
-        </div>
-      </n-step>
-      <n-step title="Select the primary measurements">
-        <div class="n-step-description">
-          <p>When I find myself in times of trouble Mother Mary comes to me</p>
+          <div class="content">
+            <n-select v-model:value="step.value" :multiple="(idx + 1) === 2 ? true : false" :options="step.options" :disabled="current !== (idx + 1) ? true : false"/>
+          </div>
           <n-button
-            v-if="current === 2"
+            v-if="current === idx + 1 && idx !== 0"
+            type="info"
+            size="small"
+            class="btn"
+            @click="prev"
+          >
+            Back
+          </n-button>
+          <n-button
+            v-if="current === idx + 1"
             :type="buttonType"
             size="small"
-            @click="handleButtonClick"
+            class="btn"
+            @click="next"
           >
             Next
           </n-button>
         </div>
       </n-step>
-      <n-step title="Come Together">
+      <n-step title="Generate Report">
         <div class="n-step-description">
-          <p>Here come old flat top He come grooving up slowly</p>
-          <n-button
-            v-if="current === 3"
-            :type="buttonType"
-            size="small"
-            @click="handleButtonClick"
-          >
-            Next
-          </n-button>
-        </div>
-      </n-step>
-      <n-step title="Something">
-        <div class="n-step-description">
-          <p>Something in the way she moves Attracts me like no other lover</p>
+          <p>
+            Click to generate the report, you also can download the report.
+          </p>
+
           <n-button
             v-if="current === 4"
-            :type="buttonType"
+            type="info"
             size="small"
-            @click="handleButtonClick"
+            class="btn"
+            @click="prev"
           >
-            Next
+            Back
+          </n-button>
+          <n-button
+            v-if="current === 4"
+            size="small"
+            color="#ff69b4"
+            class="btn"
+            @click="generateReport"
+          >
+            Generate
           </n-button>
         </div>
       </n-step>
@@ -60,45 +55,151 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import type { StepsProps } from 'naive-ui'
-import { NSteps, NStep, NButton, NRadioGroup, NRadioButton, NSelect } from 'naive-ui';
+import { ref, computed, watchEffect } from 'vue';
+import type { StepsProps } from 'naive-ui';
+import { IPatientDataset } from '@/models';
+import { NSteps, NStep, NButton, NRadioGroup, NRadioButton, NSelect, c } from 'naive-ui';
+import { useWorkflowToolProcessStore } from '@/store/app';
+import { storeToRefs } from "pinia";
 
-defineProps({
+const { workflowToolProcess } = storeToRefs(useWorkflowToolProcessStore());
+const { getWorkflowToolProcess } = useWorkflowToolProcessStore();
+
+const props = defineProps({
     screenSize: {
         type: String,
         default: 'md'
-    }
+    },
+    datasets: {
+        type: Array<IPatientDataset>,
+        default: () => []
+    },
 })
+const emit = defineEmits(['onReportData'])
 
 const current = ref(1)
 const currentStatus = ref<StepsProps['status']>('process')
-const singleValue = ref('Selecting...')
-const datasetOptions = [
-    {
-        label: 'Dataset 1',
-        value: 'uuid-1'
-    },
-    {
-        label: 'Dataset 2',
-        value: 'uuid-2'
-    },
-]
+const datasetValue = ref('Selecting...')
+const measurementsValue = ref<string[]>([]);
+const processValue = ref('Selecting...')
 
-const buttonType = computed(() => {
-    switch (currentStatus.value) {
-    case 'error':
-        return 'error'
-    case 'finish':
-        return 'success'
-    default:
-        return 'default'
+
+
+const datasetOptions = props.datasets.map((dataset, idx) => {
+    return {
+        label: `Dataste ${idx + 1}`,
+        value: dataset.researchStudy.identifier[0].value
     }
 })
 
-const handleButtonClick = () => {
-        current.value = (current.value % 4) + 1
+
+const measurementsOptions = computed(() => {
+    if (datasetValue.value === 'Selecting...') {
+        return []
+    }else {
+      const filteredDataset = props.datasets.find(dataset => dataset.researchStudy.identifier[0].value === datasetValue.value)
+      return filteredDataset?.relatedResources.measurements.map((measurement) => {
+          const label = measurement.resourceType === 'Observation' ?`${measurement.resourceType}: ${measurement.code.text}` : measurement.resourceType;
+          return {
+              label,
+              value: measurement.identifier[0].value
+          }
+      })
+    } 
+})  
+
+const processOptions = computed(() => {
+    if (measurementsValue.value.length === 0) {
+        return []
+    }else {
+      const filteredDataset = props.datasets.find(dataset => dataset.researchStudy.identifier[0].value === datasetValue.value)
+      return filteredDataset?.relatedResources.workflow_tool_processes.map((process) => {
+          return {
+              label: process.description,
+              value: process.identifier[0].value
+          }
+      })
+    }
+})
+
+const stepsData = ref([
+  {
+    title: "Select the dataset",
+    value: datasetValue,
+    options: datasetOptions
+  },
+  {
+    title: "Select primary measurements",
+    value: measurementsValue,
+    options: measurementsOptions
+  }, 
+  {
+    title: "Select the workflow tool process",
+    value: processValue,
+    options: processOptions
+  },
+])
+
+const buttonType = computed(() => {
+    switch (currentStatus.value) {
+      case 'error':
+          return 'error'
+      case 'finish':
+          return 'success'
+      default:
+          return 'success'
       }
+})
+
+watchEffect(async () => {
+  if(processValue.value !== 'Selecting...') {
+    await getWorkflowToolProcess(processValue.value);  
+  }  
+})
+
+const validate = () => {
+    if (current.value === 1) {
+        if (datasetValue.value === 'Selecting...') {
+            currentStatus.value = 'error'
+            return false
+        }
+    }
+    if (current.value === 2) {
+        if (measurementsValue.value.length === 0) {
+            currentStatus.value = 'error'
+            return false
+        }
+    }
+    currentStatus.value = 'process';
+    return true
+}
+
+const next = () => {
+    if (validate()) {
+        current.value = current.value + 1
+    }
+}
+const prev = () => {
+  if (current.value === 2) {
+    measurementsValue.value = []
+  }else if (current.value === 3) {
+    processValue.value = 'Selecting...';
+    workflowToolProcess.value = null;
+  }
+  currentStatus.value = 'process';
+  current.value = current.value - 1;
+}
+
+const generateReport = () => {
+    const datasetSelected = props.datasets.find(dataset => dataset.researchStudy.identifier[0].value === datasetValue.value)
+    const measurementsSelected = datasetSelected?.relatedResources.measurements.filter(measurement => measurementsValue.value.includes(measurement.identifier[0].value))
+    const data = {
+        dataset: datasetSelected,
+        measurements: measurementsSelected,
+        process: workflowToolProcess.value
+    }
+  emit('onReportData', data)
+}
 </script>
 
 <style scoped>
@@ -116,6 +217,6 @@ const handleButtonClick = () => {
     @apply my-3;
 }
 .btn {
-    @apply rounded-lg;
+    @apply rounded-md m-1;
 }
 </style>

@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { IPatient, IPatientDetails, IOverall } from "@/models";
+import { IPatient, IPatientDetails, IOverall, IWorkflowToolProcessDetails } from "@/models";
 
 import { 
     usePatientsInfo, 
     useOverallInfo,
-    usePatientDetails
+    usePatientDetails,
+    useWorkflowToolProcess
 } from "../plugins/api";
 
 export const usePatientsInfoStore = defineStore("patientsInfo", () => {
@@ -41,5 +42,17 @@ export const usePatientDetailsStore = defineStore("patientDetails", () => {
     return {
         patientDetails,
         getpatientDetails
+    }
+})
+
+export const useWorkflowToolProcessStore = defineStore("workflowToolProcess", () => {
+    const workflowToolProcess = ref<IWorkflowToolProcessDetails|null>();
+    const getWorkflowToolProcess= async (uuid: string) => {
+        workflowToolProcess.value = await useWorkflowToolProcess(uuid);
+    };
+
+    return {
+        workflowToolProcess,
+        getWorkflowToolProcess
     }
 })

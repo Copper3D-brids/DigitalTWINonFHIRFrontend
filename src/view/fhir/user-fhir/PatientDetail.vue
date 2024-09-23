@@ -74,14 +74,14 @@
         </div>
 
         <!-- Generate report -->
-         <div ref="reportDiv" v-if="showGenerateReport" class="mt-5">
+         <div ref="reportStepDiv" v-if="showGenerateReport" class="mt-5">
             <n-divider title-placement="left">
                 Generate Diagnostic Report for {{ patientDetails?.patient.name![0].text }}
             </n-divider>
             <patient-report-step :screen-size="screenSize" :datasets="patientDetails?.datasets" @on-report-data="getReportData"/>
          </div>
          <!-- Report -->
-         <div v-if="!!reportData">
+         <div v-if="!!reportData" ref="reportDiv">
             <patient-report :report-data="reportData" :patient-details="patientDetails"/>
          </div>
     </div>
@@ -111,6 +111,7 @@ const { getpatientDetails } = usePatientDetailsStore();
 const screenSize = ref(updateScreenSize());
 const showGenerateReport = ref(false);
 const mainDiv = ref<HTMLDivElement|null>(null);
+const reportStepDiv = ref<HTMLDivElement>();
 const reportDiv = ref<HTMLDivElement>();
 
 const reportData = ref<ReportData>();
@@ -119,7 +120,7 @@ const scrollTo = () => {
 showGenerateReport.value=!showGenerateReport.value;
 if(showGenerateReport.value){
    setTimeout(()=>{
-    reportDiv.value?.scrollIntoView({behavior: "smooth", block: "start"});
+    reportStepDiv.value?.scrollIntoView({behavior: "smooth", block: "start"});
    }, 100)
 }else{
     mainDiv.value?.scrollIntoView({behavior: "smooth"});
@@ -147,6 +148,9 @@ onUnmounted(() => {
 
 const getReportData = (data:ReportData) => {
     reportData.value = data;
+    setTimeout(()=>{
+    reportDiv.value?.scrollIntoView({behavior: "smooth", block: "start"});
+   }, 100)
 }
 
 const columnsPageSize = computed(()=>{

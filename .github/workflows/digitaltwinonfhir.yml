@@ -44,6 +44,9 @@ jobs:
       - name: Install digitaltwin on fhir dependencies
         run: yarn install 
       - name: Build with vite
+        env:
+          VITE_ADMIN_PASSKEY: ${{ secrets.VITE_ADMIN_PASSKEY }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: |
           yarn build 
           touch build/.nojekyll

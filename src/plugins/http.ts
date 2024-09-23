@@ -1,7 +1,7 @@
 import axios, {type AxiosRequestConfig} from "axios";
 
-const Base_URL = import.meta.env.VITE_API_URL;
-
+// const Base_URL = import.meta.env.VITE_API_URL;
+const Base_URL = '/api/';
 const maxRetries = 3
 const retryDelay = 1000;
 axios.defaults.baseURL = Base_URL;

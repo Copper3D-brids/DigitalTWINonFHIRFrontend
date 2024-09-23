@@ -46,6 +46,8 @@ jobs:
         run: |
           yarn build 
           touch build/.nojekyll
+      - name: Move vercel.json to build folder
+        run: mv vercel.json build/
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20

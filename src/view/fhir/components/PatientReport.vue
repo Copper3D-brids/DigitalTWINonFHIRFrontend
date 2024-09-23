@@ -22,7 +22,7 @@
                     <div>
                         <span class="ml-3">{{ reportData.process.workflow.description }}</span>
                         <div class="ml-3">
-                            <h3>Workflow tools:</h3>
+                            <h3 class="font-semibold">Workflow tools:</h3>
                             <div class="ml-3" v-for="action, idx in reportData.process.workflow.action" :key="idx">{{ action.title }}</div>
                         </div>
                     </div>

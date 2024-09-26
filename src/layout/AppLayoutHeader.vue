@@ -4,7 +4,7 @@
         <n-flex class="cursor-pointer flex flex-row items-center">
           <n-avatar
             size="medium"
-            src="4.png"
+            src="icon.png"
           />
           <h1  class="select-none heading">
             DigitalTWINs on FHIR

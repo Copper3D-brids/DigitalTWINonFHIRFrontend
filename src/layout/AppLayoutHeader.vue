@@ -4,7 +4,7 @@
         <n-flex class="cursor-pointer flex flex-row items-center">
           <n-avatar
             size="medium"
-            src="icon.png"
+            :src="icon"
           />
           <h1  class="select-none heading">
             DigitalTWINs on FHIR
@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { NFlex, NAvatar, NGradientText} from 'naive-ui';
+import icon from "@/assets/icon.png"
 import logo from "@/assets/logo.png"
 import {ref, onMounted, onUnmounted} from "vue"
 

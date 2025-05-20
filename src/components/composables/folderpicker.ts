@@ -48,8 +48,7 @@ export function useFolderPicker(){
                 root.value!.category = category;
             }
         } catch (error) {
-           console.log(error);
-            
+           console.log(error); 
         }
         
     }

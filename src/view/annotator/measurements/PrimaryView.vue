@@ -151,8 +151,8 @@ onMounted(()=>{
     patientsDirectoryHandle.value.children.forEach((item: CustomFileSystemDirectoryHandle | FileSystemFileHandle) => {
       if(item.kind === "directory"){
         samples.value += item.children.length;
-        descriptions.value.patients.push({id: "", uuid: "", name: item.name, path: root.value?.name + "/" + item.name, observations: [], imagingStudy: null})
-        formDescription.value.patients.push({id: "", uuid: "", name: item.name, path: root.value?.name + "/" + item.name, observations: [], imagingStudy: null})
+        descriptions.value.patients.push({id: "", uuid: "", name: item.name, path: root.value?.name + "/" + item.name, observations: [], imagingStudy: []})
+        formDescription.value.patients.push({id: "", uuid: "", name: item.name, path: root.value?.name + "/" + item.name, observations: [], imagingStudy: []})
         item.children.forEach((sample: CustomFileSystemDirectoryHandle | FileSystemFileHandle) =>{
           if (sample.kind === "directory"){
               sample.children.forEach((dcm) => {
@@ -202,15 +202,18 @@ const updateDescriptions = (type:"observation"|"imagingstudy") => {
       if(activeImagingDetailSwitchRef.value){
         p.imagingStudy = formDescription.value.patients[index].imagingStudy;
       }else{
-        p.imagingStudy = {
-          ...formDescription.value.patients[index].imagingStudy,
-          series: formDescription.value.patients[index].imagingStudy?.series.map((s) => {
-            return {
-              ...s,
-              instances: []
-            }
-          }) as Array<IAnnotatorImagingStudySeries>
-        } as IAnnotatorImagingStudy
+        if(!!formDescription.value.patients[index].imagingStudy[0]){
+          p.imagingStudy![0] = {
+            ...formDescription.value.patients[index].imagingStudy[0],
+            series: formDescription.value.patients[index].imagingStudy![0].series.map((s) => {
+              return {
+                ...s,
+                instances: []
+              }
+            }) as Array<IAnnotatorImagingStudySeries>
+          } as IAnnotatorImagingStudy
+        }
+        
       }
     }
   })

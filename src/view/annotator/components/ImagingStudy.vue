@@ -73,10 +73,12 @@ const onHandleGenerateImagingStudy = () => {
     for (let key in selectedPatientsSamples.value){
         const index = props.formDescription?.patients.findIndex((p)=>p.name===key);
         if (index !==undefined){
-            props.formDescription!.patients[index!].imagingStudy!.series = [];
+            props.formDescription!.patients[index!].imagingStudy![0].series = [];
             for (let s of selectedPatientsSamples.value[key]){
                 generateSeries(key, s).then((series) => {
-                    props.formDescription!.patients[index!].imagingStudy!.series.push(series);
+                    console.log(key);
+                    
+                    props.formDescription!.patients[index!].imagingStudy![0].series.push(series);
                     emit('updateImagingStudy', props.formDescription);
                 }).catch((err) => {
                     message.error(`The folder ${s} includes non-dcm files. Errors: `+ err);
@@ -84,7 +86,7 @@ const onHandleGenerateImagingStudy = () => {
             }
         }
     }
-    emit('updateImagingStudy', props.formDescription);
+    // emit('updateImagingStudy', props.formDescription);
 };
 
 const generateSeries = (patinet:string, series: string):  Promise<IAnnotatorImagingStudySeries>=>{
@@ -127,7 +129,12 @@ const generateInstances = (sampleHandle: CustomFileSystemDirectoryHandle): Promi
             return readDicom(instance);
         });
         Promise.all(promises).then((dcmInstances) => {
-            const instancesData = dcmInstances.map((dcm) => {
+            const instancesData = dcmInstances.map((dcm, index) => {
+                // console.log(dcm);
+                
+                if (index == 0)
+                    console.log("Series Description",dcm.string('x00080033'));
+                
                 const instance:IAnnotatorImagingStudySeriesInstance = {
                     uid: dcm.string('x00080018'),
                     sopClassUid: dcm.string('x00080016'),
@@ -145,9 +152,10 @@ const generateInstances = (sampleHandle: CustomFileSystemDirectoryHandle): Promi
 
 const updateImagingStudyBaseInfo = (patient: string) => {
     const index = props.formDescription?.patients.findIndex((p)=>p.name===patient);
-    if (index !==undefined && !props.formDescription?.patients[index!].imagingStudy){
-
-        props.formDescription!.patients[index!].imagingStudy = {endpointUrl: "", path: props.formDescription?.patients[index].path!, series: []};
+    console.log(props.formDescription?.patients[index!]);
+    
+    if (index !==undefined && props.formDescription?.patients[index!].imagingStudy!.length === 0){
+        props.formDescription!.patients[index!].imagingStudy?.push({endpointUrl: "", path: props.formDescription?.patients[index].path!, description:"dcm", series: []});
     }
     if (!selectedPatientsSamples.value[patient]){
         selectedPatientsSamples.value[patient] = getPatientSamples(patient);
@@ -157,8 +165,8 @@ const updateImagingStudyBaseInfo = (patient: string) => {
 const getPatientSamples = (patient: string) => {
     if (props.formDescription){
         const index = props.formDescription.patients.findIndex((p)=>p.name===patient);
-        if (props.formDescription.patients[index].imagingStudy!.series.length >= 1){
-            return props.formDescription.patients[index].imagingStudy!.series.map((s) => s.name);
+        if (props.formDescription.patients[index].imagingStudy![0].series.length >= 1){
+            return props.formDescription.patients[index].imagingStudy![0].series.map((s) => s.name);
         }
     }
     return [];

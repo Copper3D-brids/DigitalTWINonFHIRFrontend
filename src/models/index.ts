@@ -206,7 +206,7 @@ export interface IAnnotatorPatient {
     name: string;
     path: string;
     observations: Array<IAnnotatorObervation>;
-    imagingStudy: IAnnotatorImagingStudy|null;
+    imagingStudy: Array<IAnnotatorImagingStudy>;
 }
 
 export interface IAnnotatorDescription {
@@ -232,7 +232,7 @@ export interface IAnnotatorFormPatient {
     name: string;
     path: string;
     observations: Array<IFormObservation>;
-    imagingStudy: IAnnotatorImagingStudy|null;
+    imagingStudy: Array<IAnnotatorImagingStudy>;
 }
 
 export interface IAnnotatorFormDescription {

@@ -12,6 +12,9 @@
                     <n-tab-pane name="signin" tab="Sign in" class="flex h-full">
                         <Login />
                     </n-tab-pane>
+                    <n-tab-pane name="clinician" tab="Clinician" class="flex h-full">
+                        <Login />
+                    </n-tab-pane>
                     <n-tab-pane name="admin" tab="Admin" class="flex h-full">
                         <Admin />
                     </n-tab-pane>

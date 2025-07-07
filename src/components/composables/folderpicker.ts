@@ -1,57 +1,67 @@
-import {ref} from "vue";
-import { defineStore } from "pinia";
+import { ref } from 'vue'
+import { defineStore } from 'pinia'
 
+export const useFolderPickerStore = defineStore('folderPicker', () => {
+    const { root, folderPicker, folderDrop } = useFolderPicker()
+    return { root, folderPicker, folderDrop }
+})
+export function useFolderPicker() {
+    const root = ref<CustomFileSystemDirectoryHandle>()
 
-export const useFolderPickerStore = defineStore("folderPicker", () => { 
-    const {root, folderPicker, folderDrop} = useFolderPicker();
-    return {root, folderPicker, folderDrop}
-});
-export function useFolderPicker(){
-
-    const root = ref<CustomFileSystemDirectoryHandle>();
-
-    const processHandle = async (handle: any)=>{
-
-        if (handle.kind === 'file'){
-            return handle;
+    const processHandle = async (handle: any) => {
+        if (handle.kind === 'file') {
+            return handle
         }
-        handle.children = [];
-        const iter = handle.entries();
-        for await (const item of iter){
-            handle.children.push(await processHandle(item[1])) 
+        handle.children = []
+        const iter = handle.entries()
+        for await (const item of iter) {
+            handle.children.push(await processHandle(item[1]))
         }
-        return handle;
+        return handle
+    }
+
+    const _sortRoot = (r: CustomFileSystemDirectoryHandle) => {
+        const primaryArr = r.children.find((p) => {
+            return p.name === 'primary'
+        })
+
+        if (!!primaryArr) {
+            const p = primaryArr as CustomFileSystemDirectoryHandle
+            p.children.sort((a: any, b: any) => {
+                return a.name.localeCompare(b.name)
+            })
+        }
     }
 
     const folderPicker = async (category: Category | undefined) => {
-       try {
+        try {
             if (!window.showDirectoryPicker) {
-                alert('Your browser is not support showDirectoryPicker');
-                return;
+                alert('Your browser is not support showDirectoryPicker')
+                return
             }
 
-            const handle = await window.showDirectoryPicker();
+            const handle = await window.showDirectoryPicker()
 
             root.value = await processHandle(handle)
-            root.value!.category = category;
-
-       } catch (error) {
-            console.log(error);
-       }
+            root.value!.category = category
+            _sortRoot(root.value as CustomFileSystemDirectoryHandle)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    const folderDrop = async (item:DataTransferItem, category:Category | undefined) => {
+    const folderDrop = async (item: DataTransferItem, category: Category | undefined) => {
         try {
             if (item.kind === 'file') {
-                const handle = await (item as any).getAsFileSystemHandle();
+                const handle = await (item as any).getAsFileSystemHandle()
                 root.value = await processHandle(handle)
-                root.value!.category = category;
+                root.value!.category = category
+                _sortRoot(root.value as CustomFileSystemDirectoryHandle)
             }
         } catch (error) {
-           console.log(error); 
+            console.log(error)
         }
-        
     }
 
-    return {root, folderPicker, folderDrop}
+    return { root, folderPicker, folderDrop }
 }

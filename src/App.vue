@@ -8,7 +8,6 @@ import { NMessageProvider, NModalProvider } from 'naive-ui';
         <RouterView />
     </n-modal-provider>
 </n-message-provider>
-  
 </template>
 
 <style scoped>

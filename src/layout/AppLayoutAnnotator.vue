@@ -1,12 +1,12 @@
 <template>
     <n-layout class="flex flex-col bg-fancy-gradient h-screen">
+        
         <n-layout-header class="bg-transparent h-[8vh] mt-auto shadow-sm">
             <app-layout-header />
         </n-layout-header>
 
         <n-layout class="flex-1 h-[87vh] bg-transparent" has-sider @dragover.prevent @drop="(e) => e.preventDefault()">
             <app-layout-sider v-if="root ? true : false" :menu-options="menuOptions" :width="320" />
-
             <n-layout :native-scrollbar="false" class="bg-transparent">
                 <router-view></router-view>
             </n-layout>

@@ -6,6 +6,7 @@ import Patients from "@/view/fhir/admin-fhir/measurements/Patients.vue";
 import AppLayoutAnnotator from "@/layout/AppLayoutAnnotator.vue";
 import AnnotatorView from "@/view/annotator/AnnotatorView.vue";
 import Annotator from "@/view/annotator/index.vue";
+import LocalAnnotator from "@/view/annotator/LocalAnnotator.vue";
 import PrimaryView from "@/view/annotator/measurements/PrimaryView.vue";
 import testaaa from "@/view/annotator/measurements/testaaa.vue";
 import HomeView from "@/view/home/HomeView.vue";
@@ -48,6 +49,11 @@ const router = createRouter({
                     path:"/annotator",
                     name:"home-annotator",
                     component: AnnotatorView
+                },
+                {
+                    path:"/local-annotator",
+                    name:"local-annotator",
+                    component: LocalAnnotator
                 },
                 {
                     // path:"/annotator/:name",

@@ -165,11 +165,19 @@ export interface IObservationValue {
 }
 
 export interface IAnnotatorObervation {
+    uuid:string;
     value: IObservationValue;
     code: string;
     codeSystem: string;
     display: string;
     [key:string]: any;
+}
+
+export interface IAnnotatorDocumentReference {
+    uuid:string;
+    url:string;
+    contentType:string;
+    title:string;
 }
 
 export interface IAnnotatorImagingStudySeriesInstance {
@@ -194,27 +202,25 @@ export interface IAnnotatorImagingStudySeries {
 }
 
 export interface IAnnotatorImagingStudy {
-    path: string;
+    uuid:string;
     endpointUrl: string;
+    description: "dcm" | "nrrd";
     series: Array<IAnnotatorImagingStudySeries>;
     [key:string]: any;
 }
   
 export interface IAnnotatorPatient {
-    id: string;
     uuid: string;
     name: string;
-    path: string;
     observations: Array<IAnnotatorObervation>;
+    documentReference:Array<IAnnotatorDocumentReference>;
     imagingStudy: Array<IAnnotatorImagingStudy>;
 }
 
 export interface IAnnotatorDescription {
     dataset: {
-        id: string;
         uuid: string;
         name: string;
-        path: string;
     },
     patients: Array<IAnnotatorPatient>;
 }
@@ -227,20 +233,17 @@ export interface IFormObservation {
 }
 
 export interface IAnnotatorFormPatient {
-    id: string;
     uuid: string;
     name: string;
-    path: string;
     observations: Array<IFormObservation>;
+    documentReference:Array<IAnnotatorDocumentReference>;
     imagingStudy: Array<IAnnotatorImagingStudy>;
 }
 
 export interface IAnnotatorFormDescription {
     dataset: {
-        id: string;
         uuid: string;
         name: string;
-        path: string;
     },
     patients: Array<IAnnotatorFormPatient>;
 }

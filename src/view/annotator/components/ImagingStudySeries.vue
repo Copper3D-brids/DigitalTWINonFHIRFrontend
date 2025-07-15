@@ -63,6 +63,8 @@ onMounted(() => {
 
 const handleUpdate = (value: Array<string | number>) => {
     props.selectedPatientsSamples[props.patient!] = value.map((v) => v.toString());
+    console.log(props.selectedPatientsSamples);
+    
     emit('update:selectedPatientsSamples', props.selectedPatientsSamples);
 }
 

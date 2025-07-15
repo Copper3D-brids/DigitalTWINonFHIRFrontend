@@ -17,13 +17,11 @@ const props = defineProps({
         type: Array<String>,
         default: () => []
     }
-    // patients: Array as PropType<Array<string>>
 });
 
 const emit = defineEmits();
 const destroy = ref(true);
 const displayObservations = ref<Array<string>>([]);
-
 const uniqueDisplayObservations = computed(() => [...new Set(displayObservations.value)]);
 
 watch(() => props.patients, (newVal) => {

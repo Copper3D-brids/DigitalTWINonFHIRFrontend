@@ -10,8 +10,11 @@
             :disabled="validateClicked"
             class="flex flex-col flex-wrap mt-2 mr-auto ob-align-content-start"
         >   
-            <n-form-item label="ValueType" class="border shadow-fancy-2 border-zinc-300 rounded-lg px-3">
-                <n-select v-model:value="formValue.observationValueType" :options="selectObservationValueOptions" @update:value="handleSelectObservationValueTypeUpdate"  class="w-full md:w-96"/>
+            <n-form-item label="UUID (Optional)" class="form-width border shadow-fancy-1 border-zinc-300 rounded-lg py-2 px-2 my-2">
+                <n-input v-model:value="formValue.observation.uuid" placeholder="uuid" />
+            </n-form-item>
+            <n-form-item label="ValueType" class="form-width border shadow-fancy-2 border-zinc-300 rounded-lg px-3">
+                <n-select v-model:value="formValue.observationValueType" :options="selectObservationValueOptions" @update:value="handleSelectObservationValueTypeUpdate" />
             </n-form-item>
             
             <div v-if="formValue.observationValueType==='valueQuantity'?true:false" class="observation-form-item">
@@ -209,7 +212,7 @@
                 <n-form-item label="Observation Code" path="observation.code">
                     <n-input v-model:value="formValue.observation.code" placeholder="code for observation" />
                 </n-form-item>
-                <n-form-item label="Display" path="observation.display">
+                <n-form-item label="Display (Optional)" path="observation.display">
                     <n-input v-model:value="formValue.observation.display" placeholder="display for observation code" />
                 </n-form-item>
                 <n-form-item label="Observation Code System" path="observation.codeSystem">
@@ -276,18 +279,19 @@ const formValue=ref<IFormObservation>({
         belongTo: props.belongTo!,
         observationValueType: !!props.selectedObservationValueType ? props.selectedObservationValueType as any : 'valueQuantity',
         observation:  {
-          value: !!props.selectedObservationValueType ? getObservationValueTypeFormat(props.selectedObservationValueType) : {
-            valueQuantity: {
-              value: '',
-              comparator: '',
-              unit: '',
-              system: 'http://unitsofmeasure.org',
-              code: ''
-            }
-          },
-          code: '',
-          display: '',
-          codeSystem: '',
+            uuid:"",
+            value: !!props.selectedObservationValueType ? getObservationValueTypeFormat(props.selectedObservationValueType) : {
+                valueQuantity: {
+                value: '',
+                comparator: '',
+                unit: '',
+                system: 'http://unitsofmeasure.org',
+                code: ''
+                }
+            },
+            code: '',
+            display: '',
+            codeSystem: '',
         }
     });
 
@@ -328,7 +332,7 @@ const init = ()=>{
     if(formValue.value.observationValueType === 'valuePeriod'){
         datetimerange.value = [new Date(formValue.value.observation.value.valuePeriod!.start), new Date(formValue.value.observation.value.valuePeriod!.end)];
     }
-     
+
 }
 
 const codeSystemOptions = ['http://loinc.org', 'http://snomed.info/sct', 'http://dicom.nema.org/resources/ontology/DCM'].map((suffix) => {
@@ -364,6 +368,7 @@ const handleValidateClick = (e: MouseEvent) =>{
             if(formValue.value.observationValueType === 'valueCodeableConcept'){
                 formValue.value.observation.value.valueCodeableConcept!.coding = formValue.value.observation.value.valueCodeableConcept!.coding.filter((c) => c.code !== '' && c.system !== '');
             }
+            
             emit('updateObservation', formValue.value);
             // validateClicked.value = true;
             formValue.value = {
@@ -371,18 +376,19 @@ const handleValidateClick = (e: MouseEvent) =>{
                 belongTo: props.belongTo!,
                 observationValueType: 'valueQuantity',
                 observation: {
-                  value: {
-                    valueQuantity: {
-                        value: '',
-                        comparator: '',
-                        unit: '',
-                        system: 'http://unitsofmeasure.org',
-                        code: ''
-                    }
-                  },
-                  code: '',
-                  display: '',
-                  codeSystem: '',
+                    uuid: "",
+                    value: {
+                        valueQuantity: {
+                            value: '',
+                            comparator: '',
+                            unit: '',
+                            system: 'http://unitsofmeasure.org',
+                            code: ''
+                        }
+                    },
+                    code: '',
+                    display: '',
+                    codeSystem: '',
                 },
               };
           }
@@ -403,5 +409,8 @@ const handleValidateClick = (e: MouseEvent) =>{
 }
 .n-dynamic-input-item__action{
     margin: auto 0 !important;
+}
+.form-width{
+    width: 25% !important;
 }
 </style>

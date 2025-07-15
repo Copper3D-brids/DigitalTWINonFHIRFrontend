@@ -3,6 +3,9 @@
         <n-tab-pane name="Observation" tab="Observation">
             <slot name="observation"></slot>
         </n-tab-pane>
+        <n-tab-pane name="DocumentReference" tab="DocumentReference">
+            <slot name="documentReference"></slot>
+        </n-tab-pane>
         <n-tab-pane name="ImagingStudy" tab="ImagingStudy">
             <slot name="imagingstudy"></slot>
         </n-tab-pane>

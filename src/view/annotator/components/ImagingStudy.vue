@@ -76,8 +76,6 @@ const onHandleGenerateImagingStudy = () => {
             props.formDescription!.patients[index!].imagingStudy![0].series = [];
             for (let s of selectedPatientsSamples.value[key]){
                 generateSeries(key, s).then((series) => {
-                    console.log(key);
-                    
                     props.formDescription!.patients[index!].imagingStudy![0].series.push(series);
                     emit('updateImagingStudy', props.formDescription);
                 }).catch((err) => {

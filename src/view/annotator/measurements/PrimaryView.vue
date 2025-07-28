@@ -268,7 +268,7 @@ watch(patientsAnnotateUUIDData, ()=>{
 
 
 const updateDocumentReference = (data: IAnnotatorFormDescription) => {
-
+    updateDescriptions('documentReference')
 }
 
 // @ts-ignore
@@ -281,13 +281,19 @@ const updateImagingStudy = (data: IAnnotatorFormDescription) => {
     updateDescriptions('imagingstudy')
 }
 
-const updateDescriptions = (type: 'observation' | 'imagingstudy') => {
+const updateDescriptions = (type: 'observation' | 'imagingstudy' |'documentReference') => {
     descriptions.value.patients.forEach((p) => {
         const index = formDescription.value.patients.findIndex((item) => item.name === p.name)
         if (type === 'observation') {
             p.observations = []
             formDescription.value.patients[index].observations.forEach((o) => {
                 p.observations.push(o.observation)
+            })
+        }
+        if (type === 'documentReference') {
+            p.documentReference = []
+            formDescription.value.patients[index].documentReference.forEach((o) => {
+                p.documentReference.push(o.documentReference)
             })
         }
         if (type === 'imagingstudy') {

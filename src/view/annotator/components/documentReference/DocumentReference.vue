@@ -1,14 +1,14 @@
 <template>
     <div>
-      <FormDocumentationReference :belongTo="patients"  @updateObservation="updateObservations"/>
-      <FormDocumentationReference v-if="destroy" v-for="d in uniqueDisplayObservations" :key="uuidv4()" :belongTo="patients" :selectedObservationValueType="JSON.parse(d)['observationValueType']" :filledData="JSON.parse(d)" disabled  @updateObservation="updateObservations" />
+      <FormDocumentReference :belongTo="patients"  @updateDocumentReference="updateDocumentReference"/>
+      <FormDocumentReference v-if="destroy" v-for="d in uniqueDisplayDocumentReference" :key="uuidv4()" :belongTo="patients" :filledData="JSON.parse(d)" disabled  @updateDocumentReference="updateDocumentReference" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, computed, PropType, onMounted } from "vue";
-import FormDocumentationReference from "./FormDocumentationReference.vue";
-import { IFormObservation, IAnnotatorFormDescription} from "@/models";
+import FormDocumentReference from "./FormDocumentReference.vue";
+import { IFormDocumentReference, IAnnotatorFormDescription} from "@/models";
 import { v4 as uuidv4 } from 'uuid';
 
 const props = defineProps({
@@ -21,63 +21,65 @@ const props = defineProps({
 
 const emit = defineEmits();
 const destroy = ref(true);
-const displayObservations = ref<Array<string>>([]);
-const uniqueDisplayObservations = computed(() => [...new Set(displayObservations.value)]);
+const displayDocumentReference = ref<Array<string>>([]);
+const uniqueDisplayDocumentReference = computed(() => [...new Set(displayDocumentReference.value)]);
 
 watch(() => props.patients, (newVal) => {
   if(newVal!.length > 0){
-    generateDisplayObservations();
+    generateDisplayDocumentReference();
   }
 })
 
 onMounted(() => {
   if(props.formDescription){
-    generateDisplayObservations();
+    generateDisplayDocumentReference();
   }
   console.log("FormObservation mounted with patients:", props.patients);
   
 })
 
-const updateObservations = (data: IFormObservation) => {
+const updateDocumentReference = (data: IFormDocumentReference) => {
   if(data.operation === "add"){
       data.belongTo.forEach((p) => {
       const index = props.formDescription!.patients.findIndex((item) => item.name === p);
-      props.formDescription!.patients[index].observations.push(data);
+      props.formDescription!.patients[index].documentReference.push(data);
     })
   }else if (data.operation === "remove"){
     data.belongTo.forEach((p) => {
       const index = props.formDescription!.patients.findIndex((item) => item.name === p);
-      props.formDescription!.patients[index].observations = props.formDescription!.patients[index].observations.filter((o) => JSON.stringify(o.observation) !== JSON.stringify(data.observation));
+      props.formDescription!.patients[index].documentReference = props.formDescription!.patients[index].documentReference.filter((o) => JSON.stringify(o.documentReference) !== JSON.stringify(data.documentReference));
     })
   }
-  generateDisplayObservations();
+  generateDisplayDocumentReference();
+  console.log("Updated formDescription:", props.formDescription);
+  
   emit('updateDocumentReference', props.formDescription);
 }
 
-const generateDisplayObservations = () => {
+const generateDisplayDocumentReference = () => {
   destroy.value = false;
-  displayObservations.value = [];
+  displayDocumentReference.value = [];
   if (props.patients.length === 1){
     props.formDescription!.patients.forEach((p) => {
       if(props.patients.includes(p.name)){
-        p.observations.forEach((o) => {
-          displayObservations.value.push(JSON.stringify(Object.assign(o.observation, {observationValueType: o.observationValueType})));
+        p.documentReference.forEach((o) => {
+          displayDocumentReference.value.push(JSON.stringify(o.documentReference));
         })
       }
     })
   } else if(props.patients.length > 1){
-    let arrays:Array<Array<IFormObservation>> = [];
+    let arrays:Array<Array<IFormDocumentReference>> = [];
     props.formDescription!.patients.forEach((p) => {
       if(props.patients.includes(p.name)){
-        arrays.push(p.observations);
+        arrays.push(p.documentReference);
       }
     })
-    displayObservations.value = arrays.reduce((accumulator, currentValue) => {
-      return accumulator.filter((o) => currentValue.map((c) => JSON.stringify(c.observation)).includes(JSON.stringify(o.observation)));
-    }).map((o) => JSON.stringify(Object.assign(o.observation, {observationValueType: o.observationValueType})));
+    displayDocumentReference.value = arrays.reduce((accumulator, currentValue) => {
+      return accumulator.filter((o) => currentValue.map((c) => JSON.stringify(c.documentReference)).includes(JSON.stringify(o.documentReference)));
+    }).map((o) => JSON.stringify(o.documentReference));
   }
   else{
-    displayObservations.value = [];
+    displayDocumentReference.value = [];
   }
   destroy.value = true;
 }

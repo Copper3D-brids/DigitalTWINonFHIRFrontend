@@ -488,3 +488,38 @@ export const observationRules =  {
         },
         },
       }
+export const documentReferenceRules = {
+    documentReference: {
+        url:{
+                required: true,
+                // @ts-ignore
+                validator(rule: FormItemRule, value: string) {
+                    if (!value) {
+                        return new Error('DocucmentationReference Url is required')
+                    }
+                    return true
+                },
+                trigger: 'blur'},
+        contentType:{
+                required: true,
+                // @ts-ignore
+                validator(rule: FormItemRule, value: string) {
+                    if (!value) {
+                        return new Error('DocumentReference ContentType is required')
+                    }
+                    return true
+                },
+                trigger: 'blur'},
+        title:{
+                required: true,
+                // @ts-ignore
+                validator(rule: FormItemRule, value: string) {
+                    if (!value) {
+                        return new Error('DocumentReference Title is required')
+                    }
+                    return true
+                },
+                trigger: 'blur'},
+    }
+    
+}

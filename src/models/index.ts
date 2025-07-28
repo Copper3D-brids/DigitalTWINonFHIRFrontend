@@ -232,11 +232,17 @@ export interface IFormObservation {
         observation: IAnnotatorObervation,
 }
 
+export interface IFormDocumentReference {
+        operation: 'add' | 'remove',
+        belongTo: Array<String>,
+        documentReference: IAnnotatorDocumentReference,
+}
+
 export interface IAnnotatorFormPatient {
     uuid: string;
     name: string;
     observations: Array<IFormObservation>;
-    documentReference:Array<IAnnotatorDocumentReference>;
+    documentReference:Array<IFormDocumentReference>;
     imagingStudy: Array<IAnnotatorImagingStudy>;
 }
 

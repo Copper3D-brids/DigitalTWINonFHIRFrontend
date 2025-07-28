@@ -1,13 +1,13 @@
 <template>
     <div>
-      <FormObservation :belongTo="patients"  @updateObservation="updateObservations"/>
-      <FormObservation v-if="destroy" v-for="d in uniqueDisplayObservations" :key="uuidv4()" :belongTo="patients" :selectedObservationValueType="JSON.parse(d)['observationValueType']" :filledData="JSON.parse(d)" disabled  @updateObservation="updateObservations" />
+      <FormDocumentationReference :belongTo="patients"  @updateObservation="updateObservations"/>
+      <FormDocumentationReference v-if="destroy" v-for="d in uniqueDisplayObservations" :key="uuidv4()" :belongTo="patients" :selectedObservationValueType="JSON.parse(d)['observationValueType']" :filledData="JSON.parse(d)" disabled  @updateObservation="updateObservations" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, computed, PropType, onMounted } from "vue";
-import FormObservation from "../components/FormObservation.vue";
+import FormDocumentationReference from "./FormDocumentationReference.vue";
 import { IFormObservation, IAnnotatorFormDescription} from "@/models";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -34,6 +34,8 @@ onMounted(() => {
   if(props.formDescription){
     generateDisplayObservations();
   }
+  console.log("FormObservation mounted with patients:", props.patients);
+  
 })
 
 const updateObservations = (data: IFormObservation) => {
@@ -49,7 +51,7 @@ const updateObservations = (data: IFormObservation) => {
     })
   }
   generateDisplayObservations();
-  emit('updateObservation', props.formDescription);
+  emit('updateDocumentReference', props.formDescription);
 }
 
 const generateDisplayObservations = () => {

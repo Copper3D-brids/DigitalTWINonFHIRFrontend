@@ -52,6 +52,14 @@
                         @updateObservation="updateObservations"
                     />
                 </template>
+                <template #documentReference>
+                    <n-h6>Add DocumentReference for selected patients:</n-h6>
+                    <DocumentReference
+                        :patients="patients"
+                        :formDescription="formDescription"
+                        @updateDocumentReference="updateDocumentReference"
+                    />
+                </template>
                 <template #imagingstudy>
                     <n-h6>Generating ImagingStudy for selected patients:</n-h6>
                     <ImagingStudy
@@ -91,8 +99,9 @@ import AnnotatorPageSummary from '../components/AnnotatorPageSummary.vue'
 import DatasetInfoEditor from '../components/DatasetInfoEditor.vue'
 import PatientModal from '../components/PatientModal.vue'
 import FormTab from '../components/FormTab.vue'
-import Observation from '../components/Observation.vue'
-import ImagingStudy from '../components/ImagingStudy.vue'
+import Observation from '../components/observation/Observation.vue'
+import ImagingStudy from '../components/imagingStudy/ImagingStudy.vue'
+import DocumentReference from '../components/documentReference/DocumentReference.vue'
 import { NStatistic, NCheckbox, NCheckboxGroup, NH3, NH6, NDivider, NSwitch, NButton } from 'naive-ui'
 import { useFolderPickerStore } from '@/components/composables/folderpicker'
 import { storeToRefs } from 'pinia'
@@ -257,6 +266,10 @@ watch(patientsAnnotateUUIDData, ()=>{
     }
 }, {deep: true})
 
+
+const updateDocumentReference = (data: IAnnotatorFormDescription) => {
+
+}
 
 // @ts-ignore
 const updateObservations = (data: IAnnotatorFormDescription) => {

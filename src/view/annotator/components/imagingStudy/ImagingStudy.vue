@@ -23,7 +23,7 @@ import { PropType, onMounted, ref, watch, computed, onBeforeMount } from "vue";
 import ImagingStudySeries from "./ImagingStudySeries.vue";
 import ImagingStudyAnnotatorModal from "./ImagingStudyAnnotatorModal.vue";
 import { NText, useMessage} from "naive-ui";
-import { readDicom, SNOMEDCT, SOP_CLASS_NAMES, parseNrrdHeader } from "./utils";
+import { readDicom, SNOMEDCT, SOP_CLASS_NAMES, parseNrrdHeader } from "@/view/annotator/components/utils";
 import FancyButton from "@/components/FancyButton.vue";
 
 const props = defineProps({
@@ -196,8 +196,8 @@ const generateDcmInstances = (sampleHandle: CustomFileSystemDirectoryHandle): Pr
         });
         Promise.all(promises).then((dcmInstances) => {
             const instancesData = dcmInstances.map((dcm, index) => {
-                if (index == 0)
-                    console.log("Series Description",dcm.string('x00080033'));
+                // if (index == 0)
+                //     console.log("Series Description",dcm.string('x00080033'));
                 
                 const instance:IAnnotatorImagingStudySeriesInstance = {
                     uid: dcm.string('x00080018'),
@@ -255,9 +255,6 @@ const generateNrrdInstances = (sampleHandle: CustomFileSystemDirectoryHandle): P
         });
         Promise.all(promises).then((nrrdHeaders) => {
             const instancesData = nrrdHeaders.map((nrrdHeader, index) => {
-                if (index == 0)
-                    console.log("Series Description", nrrdHeader['description']);
-                
                 const instance:IAnnotatorImagingStudySeriesInstance = {
                     uid: nrrdHeader['uid'] || '',
                     sopClassUid: 'nrrd',

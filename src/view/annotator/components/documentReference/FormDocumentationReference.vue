@@ -244,7 +244,7 @@ import { IFormObservation, IAnnotatorObervation } from "@/models";
 import type { FormInst } from 'naive-ui';
 import { useMessage } from 'naive-ui';
 import { useIcons } from "@/layout/composables/icons";
-import {getObservationValueTypeFormat, selectObservationValueOptions, observationRules} from "./utils";
+import {getObservationValueTypeFormat, selectObservationValueOptions, observationRules} from "@/view/annotator/components/utils.ts";
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
 

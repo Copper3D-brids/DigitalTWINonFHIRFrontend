@@ -4,6 +4,35 @@ import type { FormItemRule} from 'naive-ui';
 import { format } from 'date-fns';
 import yaml from 'js-yaml';
 
+export async function parseNrrdHeader( fileHandle: FileSystemFileHandle): Promise<Record<string, string>> {
+
+  return new Promise(async (resolve, reject) => {
+    const file = await fileHandle.getFile()
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      const text = reader.result as string
+      const headerLines = text.split(/\r?\n/)
+      const header: Record<string, string> = {}
+
+      for (const line of headerLines) {
+        if (line.trim() === '' || line.startsWith('#')) continue
+        if (line === 'endian' || line.startsWith('data file')) break
+        const [key, ...rest] = line.split(':')
+        if (key && rest.length > 0) {
+          header[key.trim()] = rest.join(':').trim()
+        }
+      }
+
+      resolve(header)
+    }
+
+    reader.onerror = (e) => reject(e)
+    reader.readAsText(file)
+  })
+}
+
+
 
 export const readDicom = (fileHandle: FileSystemFileHandle): Promise<any> => {
     return new Promise(async (resolve, reject) => {

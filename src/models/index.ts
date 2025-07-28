@@ -204,7 +204,7 @@ export interface IAnnotatorImagingStudySeries {
 export interface IAnnotatorImagingStudy {
     uuid:string;
     endpointUrl: string;
-    description: "dcm" | "nrrd";
+    description: "dcm" | "nrrd" | string;
     series: Array<IAnnotatorImagingStudySeries>;
     [key:string]: any;
 }
@@ -248,8 +248,13 @@ export interface IAnnotatorFormDescription {
     patients: Array<IAnnotatorFormPatient>;
 }
 
+export interface ISelectedPatientsSample {
+        sampleName: string;
+        description: string;
+    }
+
 export interface ISelectedPatientsSamples {
-    [key:string]: Array<string>;
+    [key:string]: Array<ISelectedPatientsSample>;
 }
 
 export interface ICodeableConcept {
@@ -292,12 +297,13 @@ export interface IImagingStudySeriesInstance {
 export interface IImagingStudySeries {
     uid: string;
     numberOfInstances: number;
+    name:string;
     modality: {
         system: string;
         code: string;
         display: string;
     };
-    endpoint: IReference[]
+    endpointUrl: string;
     bodySite: {
         system: string;
         code: string;
@@ -315,7 +321,7 @@ export interface IImagingStudy {
     subject: IReference;
     started: string;
     referrer: IReference;
-    endpoint: Array<IReference>;
+    endpoint: string;
     numberOfSeries: number;
     numberOfInstances: number;
     series: Array<IImagingStudySeries>;

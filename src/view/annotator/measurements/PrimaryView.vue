@@ -281,16 +281,18 @@ const updateDescriptions = (type: 'observation' | 'imagingstudy') => {
             if (activeImagingDetailSwitchRef.value) {
                 p.imagingStudy = formDescription.value.patients[index].imagingStudy
             } else {
-                if (!!formDescription.value.patients[index].imagingStudy[0]) {
-                    p.imagingStudy![0] = {
-                        ...formDescription.value.patients[index].imagingStudy[0],
-                        series: formDescription.value.patients[index].imagingStudy![0].series.map((s) => {
-                            return {
-                                ...s,
-                                instances: []
-                            }
-                        }) as Array<IAnnotatorImagingStudySeries>
-                    } as IAnnotatorImagingStudy
+                if (!!formDescription.value.patients[index].imagingStudy && formDescription.value.patients[index].imagingStudy.length > 0) {
+                    p.imagingStudy! = formDescription.value.patients[index].imagingStudy.map((study) => {
+                        return {
+                            ...study,
+                            series: study.series.map((s) => {
+                                return {
+                                    ...s,
+                                    instances: []
+                                } as IAnnotatorImagingStudySeries
+                            })
+                        } as IAnnotatorImagingStudy
+                    });
                 }
             }
         }

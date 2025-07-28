@@ -8,12 +8,12 @@
             :rules="observationRules"
             :size="size"
             :disabled="validateClicked"
-            class="flex flex-col flex-wrap mt-2 mr-auto ob-align-content-start"
+            class="flex flex-col flex-wrap my-2 mr-auto ob-align-content-start"
         >   
-            <n-form-item label="UUID (Optional)" class="form-width border shadow-fancy-1 border-zinc-300 rounded-lg py-2 px-2 my-2">
-                <n-input v-model:value="formValue.observation.uuid" placeholder="uuid" />
+            <n-form-item label="UUID (Optional)" class="form-width border shadow-fancy-1 border-zinc-300 rounded-lg py-2 px-2 my-4 ">
+                <n-input v-model:value="formValue.observation.uuid" placeholder="uuid"/>
             </n-form-item>
-            <n-form-item label="ValueType" class="form-width border shadow-fancy-2 border-zinc-300 rounded-lg px-3">
+            <n-form-item label="ValueType" class="form-width border shadow-fancy-1 border-zinc-300 rounded-lg px-3 my-2">
                 <n-select v-model:value="formValue.observationValueType" :options="selectObservationValueOptions" @update:value="handleSelectObservationValueTypeUpdate" />
             </n-form-item>
             
@@ -411,6 +411,7 @@ const handleValidateClick = (e: MouseEvent) =>{
     margin: auto 0 !important;
 }
 .form-width{
-    width: 25% !important;
+    width: 60% !important;
 }
+
 </style>

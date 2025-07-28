@@ -65,7 +65,7 @@ export default {
         'fancy-4': '23% 77% 80% 20% / 52% 41% 59% 48% ',
       },
       backgroundImage: {
-        'fancy-gradient': 'linear-gradient(45deg, #bfbfbf, #e6e6e6)',
+        'fancy-gradient': 'linear-gradient(45deg, #bfbfbf, #e6e6e6)', 
       },
     },
   },

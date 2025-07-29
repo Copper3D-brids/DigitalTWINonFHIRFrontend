@@ -32,9 +32,13 @@ import { IAnnotatorFormDescription, ISelectedPatientsSamples, IAnnotatorImagingS
 import { PropType, onMounted, ref, watch, computed } from "vue";
 import ImagingStudySeries from "./ImagingStudySeries.vue";
 import { NButton, NText, useMessage} from "naive-ui";
-import { readDicom, SNOMEDCT, SOP_CLASS_NAMES } from "./utils";
+import { readDicom, SNOMEDCT, SOP_CLASS_NAMES } from "../utils";
 import FancyButton from "@/components/FancyButton.vue";
 
+/**
+ * This ImagingStudy is consider each sample should be an ImagingStudySeries.
+ * But new discussion is each sample should be an ImagingStudy
+ */
 
 const props = defineProps({
     formDescription: Object as PropType<IAnnotatorFormDescription>,
@@ -76,8 +80,6 @@ const onHandleGenerateImagingStudy = () => {
             props.formDescription!.patients[index!].imagingStudy![0].series = [];
             for (let s of selectedPatientsSamples.value[key]){
                 generateSeries(key, s).then((series) => {
-                    console.log(key);
-                    
                     props.formDescription!.patients[index!].imagingStudy![0].series.push(series);
                     emit('updateImagingStudy', props.formDescription);
                 }).catch((err) => {
@@ -155,7 +157,7 @@ const updateImagingStudyBaseInfo = (patient: string) => {
     console.log(props.formDescription?.patients[index!]);
     
     if (index !==undefined && props.formDescription?.patients[index!].imagingStudy!.length === 0){
-        props.formDescription!.patients[index!].imagingStudy?.push({endpointUrl: "", path: props.formDescription?.patients[index].path!, description:"dcm", series: []});
+        props.formDescription!.patients[index!].imagingStudy?.push({uuid:"", endpointUrl: "", description:"dcm", series: []});
     }
     if (!selectedPatientsSamples.value[patient]){
         selectedPatientsSamples.value[patient] = getPatientSamples(patient);

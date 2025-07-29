@@ -13,6 +13,10 @@
 
     <div v-show="annotator === 'Annotate' ? false : true">
         <div class="p-3 m-3">
+            <DatasetInfoEditor v-model:uuid="formDescription.dataset.uuid" v-model:name="formDescription.dataset.name"/>
+            <n-divider />
+        </div>
+        <div class="p-3 m-3">
             <n-h3>Select Patients:</n-h3>
             <n-switch v-model:value="activePatientsSwitch" @update:value="handleSwitchBtn">
                 <template #checked> Selected All Patients </template>
@@ -35,6 +39,10 @@
 
     <div v-show="patients.length > 0 && annotator !== 'Annotate' ? true : false">
         <div class="p-3 m-3">
+            <PatientModal v-if="showPatientEditorModal" v-model:modal="showPatientEditorModal" v-model:patients-data="patientsAnnotateUUIDData"/>
+            <n-button strong secondary type="primary" @click="showPatientEditorModal=true">Annotate patients' uuids</n-button>
+        </div>
+        <div class="p-3 m-3">
             <FormTab>
                 <template #observation>
                     <n-h6>Add Observations for selected patients:</n-h6>
@@ -42,6 +50,14 @@
                         :patients="patients"
                         :formDescription="formDescription"
                         @updateObservation="updateObservations"
+                    />
+                </template>
+                <template #documentReference>
+                    <n-h6>Add DocumentReference for selected patients:</n-h6>
+                    <DocumentReference
+                        :patients="patients"
+                        :formDescription="formDescription"
+                        @updateDocumentReference="updateDocumentReference"
                     />
                 </template>
                 <template #imagingstudy>
@@ -78,14 +94,15 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch, CSSProperties } from 'vue'
-
 import { useRoute, useRouter } from 'vue-router'
 import AnnotatorPageSummary from '../components/AnnotatorPageSummary.vue'
-
+import DatasetInfoEditor from '../components/localAnnotator/dataset/DatasetInfoEditor.vue'
+import PatientModal,  { IPatientFormValue } from '../components/localAnnotator/dataset/PatientModal.vue'
 import FormTab from '../components/FormTab.vue'
-import Observation from '../components/Observation.vue'
-import ImagingStudy from '../components/ImagingStudy.vue'
-import { NStatistic, NCheckbox, NCheckboxGroup, NH3, NH6, NDivider, NSwitch } from 'naive-ui'
+import Observation from '../components/localAnnotator/observation/Observation.vue'
+import ImagingStudy from '../components/localAnnotator/imagingStudy/ImagingStudy.vue'
+import DocumentReference from '../components/localAnnotator/documentReference/DocumentReference.vue'
+import { NStatistic, NCheckbox, NCheckboxGroup, NH3, NH6, NDivider, NSwitch, NButton } from 'naive-ui'
 import { useFolderPickerStore } from '@/components/composables/folderpicker'
 import { storeToRefs } from 'pinia'
 import {
@@ -108,20 +125,24 @@ const samples = ref(0)
 const dicoms = ref(0)
 const annotator = ref('Annotate')
 
-const patients = ref<Array<string>>([])
-
 const activeImagingDetailSwitchRef = ref(false)
 const loadingSwitchRef = ref(false)
+const showPatientEditorModal = ref(false)
+
+// store all patients' names
+const patients = ref<Array<string>>([])
+const patientsAnnotateUUIDData = ref<Array<IPatientFormValue>>([])
 
 const formDescription = ref<IAnnotatorFormDescription>({
-    dataset: { id: '', uuid: '', name: root.value?.name!, path: '/' },
+    dataset: { uuid: '', name: root.value?.name! },
     patients: []
 })
 const descriptions = ref<IAnnotatorDescription>({
-    dataset: { id: '', uuid: '', name: root.value?.name!, path: '/' },
+    dataset: { uuid: '', name: root.value?.name!},
     patients: []
 })
 
+// for select all patients
 const activePatientsSwitch = ref(false)
 const railStyle = ({ focused, checked }: { focused: boolean; checked: boolean }): CSSProperties => {
     const style: CSSProperties = {}
@@ -155,7 +176,13 @@ watch(activeImagingDetailSwitchRef, (newVal) => {
     updateDescriptions('imagingstudy')
 })
 
+/**
+ * 1. Get local dataset directory handle
+ * 2. initialize description fhir and formDescription fhir
+ * 3. Get total number of dcm files
+ */
 onMounted(() => {
+    // read local dataset
     patientsDirectoryHandle.value = root.value?.children.filter(
         (item: any) => item.name === filename.value
     )[0] as CustomFileSystemDirectoryHandle
@@ -164,26 +191,28 @@ onMounted(() => {
         // router.push({name: "home-annotator"})
         router.push('/')
     } else {
+        // deal with dataset folders and files
         patientsDirectoryHandle.value.children.forEach(
             (item: CustomFileSystemDirectoryHandle | FileSystemFileHandle) => {
                 if (item.kind === 'directory') {
                     samples.value += item.children.length
+                    // initialize description fhir  
                     descriptions.value.patients.push({
-                        id: '',
                         uuid: '',
                         name: item.name,
-                        path: root.value?.name + '/' + item.name,
                         observations: [],
+                        documentReference: [],
                         imagingStudy: []
                     })
+                    // initialize form description fhir
                     formDescription.value.patients.push({
-                        id: '',
                         uuid: '',
                         name: item.name,
-                        path: root.value?.name + '/' + item.name,
                         observations: [],
+                        documentReference: [],
                         imagingStudy: []
                     })
+                    // Get the total number of dcm files
                     item.children.forEach((sample: CustomFileSystemDirectoryHandle | FileSystemFileHandle) => {
                         if (sample.kind === 'directory') {
                             sample.children.forEach((dcm) => {
@@ -199,7 +228,19 @@ onMounted(() => {
     }
 })
 
+
+// watch for select all patients
 watch(patients, (newVal) => {
+    patients.value.sort()
+    patientsAnnotateUUIDData.value = []
+
+    for (let name of patients.value){
+        const patient = formDescription.value.patients.find(p => p.name == name)
+        patientsAnnotateUUIDData.value.push({
+            name,
+            uuid: patient?.uuid!
+        })
+    }
     if (newVal.length > 0) {
         if (newVal.length === formDescription.value.patients.length) {
             activePatientsSwitch.value = true
@@ -208,6 +249,26 @@ watch(patients, (newVal) => {
         activePatientsSwitch.value = false
     }
 })
+
+watch(() => formDescription.value.dataset.name, (newVal, oldVal) => {
+  descriptions.value.dataset.name = newVal
+})
+watch(() => formDescription.value.dataset.uuid, (newVal, oldVal) => {
+  descriptions.value.dataset.uuid = newVal
+})
+
+watch(patientsAnnotateUUIDData, ()=>{
+    for(let patientData of patientsAnnotateUUIDData.value){
+        const formPatient = formDescription.value.patients.find(p => p.name == patientData.name)
+        const desPatient = descriptions.value.patients.find(p => p.name == patientData.name)
+        formPatient!.uuid = desPatient!.uuid = patientData.uuid
+    }
+}, {deep: true})
+
+
+const updateDocumentReference = (data: IAnnotatorFormDescription) => {
+    updateDescriptions('documentReference')
+}
 
 // @ts-ignore
 const updateObservations = (data: IAnnotatorFormDescription) => {
@@ -219,7 +280,7 @@ const updateImagingStudy = (data: IAnnotatorFormDescription) => {
     updateDescriptions('imagingstudy')
 }
 
-const updateDescriptions = (type: 'observation' | 'imagingstudy') => {
+const updateDescriptions = (type: 'observation' | 'imagingstudy' |'documentReference') => {
     descriptions.value.patients.forEach((p) => {
         const index = formDescription.value.patients.findIndex((item) => item.name === p.name)
         if (type === 'observation') {
@@ -228,20 +289,28 @@ const updateDescriptions = (type: 'observation' | 'imagingstudy') => {
                 p.observations.push(o.observation)
             })
         }
+        if (type === 'documentReference') {
+            p.documentReference = []
+            formDescription.value.patients[index].documentReference.forEach((o) => {
+                p.documentReference.push(o.documentReference)
+            })
+        }
         if (type === 'imagingstudy') {
             if (activeImagingDetailSwitchRef.value) {
                 p.imagingStudy = formDescription.value.patients[index].imagingStudy
             } else {
-                if (!!formDescription.value.patients[index].imagingStudy[0]) {
-                    p.imagingStudy![0] = {
-                        ...formDescription.value.patients[index].imagingStudy[0],
-                        series: formDescription.value.patients[index].imagingStudy![0].series.map((s) => {
-                            return {
-                                ...s,
-                                instances: []
-                            }
-                        }) as Array<IAnnotatorImagingStudySeries>
-                    } as IAnnotatorImagingStudy
+                if (!!formDescription.value.patients[index].imagingStudy && formDescription.value.patients[index].imagingStudy.length > 0) {
+                    p.imagingStudy! = formDescription.value.patients[index].imagingStudy.map((study) => {
+                        return {
+                            ...study,
+                            series: study.series.map((s) => {
+                                return {
+                                    ...s,
+                                    instances: []
+                                } as IAnnotatorImagingStudySeries
+                            })
+                        } as IAnnotatorImagingStudy
+                    });
                 }
             }
         }

@@ -165,11 +165,19 @@ export interface IObservationValue {
 }
 
 export interface IAnnotatorObervation {
+    uuid:string;
     value: IObservationValue;
     code: string;
     codeSystem: string;
     display: string;
     [key:string]: any;
+}
+
+export interface IAnnotatorDocumentReference {
+    uuid:string;
+    url:string;
+    contentType:string;
+    title:string;
 }
 
 export interface IAnnotatorImagingStudySeriesInstance {
@@ -194,27 +202,25 @@ export interface IAnnotatorImagingStudySeries {
 }
 
 export interface IAnnotatorImagingStudy {
-    path: string;
+    uuid:string;
     endpointUrl: string;
+    description: "dcm" | "nrrd" | string;
     series: Array<IAnnotatorImagingStudySeries>;
     [key:string]: any;
 }
   
 export interface IAnnotatorPatient {
-    id: string;
     uuid: string;
     name: string;
-    path: string;
     observations: Array<IAnnotatorObervation>;
+    documentReference:Array<IAnnotatorDocumentReference>;
     imagingStudy: Array<IAnnotatorImagingStudy>;
 }
 
 export interface IAnnotatorDescription {
     dataset: {
-        id: string;
         uuid: string;
         name: string;
-        path: string;
     },
     patients: Array<IAnnotatorPatient>;
 }
@@ -226,27 +232,35 @@ export interface IFormObservation {
         observation: IAnnotatorObervation,
 }
 
+export interface IFormDocumentReference {
+        operation: 'add' | 'remove',
+        belongTo: Array<String>,
+        documentReference: IAnnotatorDocumentReference,
+}
+
 export interface IAnnotatorFormPatient {
-    id: string;
     uuid: string;
     name: string;
-    path: string;
     observations: Array<IFormObservation>;
+    documentReference:Array<IFormDocumentReference>;
     imagingStudy: Array<IAnnotatorImagingStudy>;
 }
 
 export interface IAnnotatorFormDescription {
     dataset: {
-        id: string;
         uuid: string;
         name: string;
-        path: string;
     },
     patients: Array<IAnnotatorFormPatient>;
 }
 
+export interface ISelectedPatientsSample {
+        sampleName: string;
+        description: string;
+    }
+
 export interface ISelectedPatientsSamples {
-    [key:string]: Array<string>;
+    [key:string]: Array<ISelectedPatientsSample>;
 }
 
 export interface ICodeableConcept {
@@ -289,12 +303,13 @@ export interface IImagingStudySeriesInstance {
 export interface IImagingStudySeries {
     uid: string;
     numberOfInstances: number;
+    name:string;
     modality: {
         system: string;
         code: string;
         display: string;
     };
-    endpoint: IReference[]
+    endpointUrl: string;
     bodySite: {
         system: string;
         code: string;
@@ -312,7 +327,7 @@ export interface IImagingStudy {
     subject: IReference;
     started: string;
     referrer: IReference;
-    endpoint: Array<IReference>;
+    endpoint: string;
     numberOfSeries: number;
     numberOfInstances: number;
     series: Array<IImagingStudySeries>;

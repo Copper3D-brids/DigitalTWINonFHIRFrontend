@@ -24,6 +24,10 @@ import {NH6, NText, NTransfer} from 'naive-ui'
 import { onMounted, PropType, ref } from 'vue';
 import {  ISelectedPatientsSamples} from "@/models";
 
+/**
+ * This ImagingStudySeries is consider each sample should be an ImagingStudySeries.
+ * But new discussion is each sample should be an ImagingStudy
+ */
 
 // const props = defineProps<{patient:string, patientDirectoryHandle:CustomFileSystemDirectoryHandle}>();
 const props = defineProps({
@@ -63,6 +67,8 @@ onMounted(() => {
 
 const handleUpdate = (value: Array<string | number>) => {
     props.selectedPatientsSamples[props.patient!] = value.map((v) => v.toString());
+    console.log(props.selectedPatientsSamples);
+    
     emit('update:selectedPatientsSamples', props.selectedPatientsSamples);
 }
 

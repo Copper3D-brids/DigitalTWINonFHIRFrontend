@@ -13,7 +13,7 @@
 import PageSummary from "@/components/PageSummary.vue";
 import { NButton, NSpace } from 'naive-ui';
 import { useRoute, useRouter } from 'vue-router';
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref } from 'vue';
 import {useFolderPickerStore} from "@/components/composables/folderpicker";
 import { storeToRefs } from "pinia";
 

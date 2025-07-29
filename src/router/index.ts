@@ -7,8 +7,8 @@ import AppLayoutAnnotator from "@/layout/AppLayoutAnnotator.vue";
 import AnnotatorView from "@/view/annotator/AnnotatorView.vue";
 import Annotator from "@/view/annotator/index.vue";
 import LocalAnnotator from "@/view/annotator/LocalAnnotator.vue";
-import PrimaryView from "@/view/annotator/measurements/PrimaryView.vue";
-import testaaa from "@/view/annotator/measurements/testaaa.vue";
+import LocalPrimaryView from "@/view/annotator/measurements/LocalPrimaryView.vue";
+import DigitalTwinPrimaryView from "@/view/annotator/measurements/DigitalTwinPrimaryView.vue";
 import HomeView from "@/view/home/HomeView.vue";
 import WorkflowView from "@/view/annotator/workflow/WorkflowView.vue";
 import LoginView from "@/view/home/LoginView.vue";
@@ -57,9 +57,9 @@ const router = createRouter({
                 },
                 {
                     // path:"/annotator/:name",
-                    path:"/measurements",
-                    name:"measurements",
-                    component: PrimaryView
+                    path:"/measurements-local",
+                    name:"measurements-local",
+                    component: LocalPrimaryView
                 },
                 {
                     // path:"/annotator/:name",
@@ -68,9 +68,9 @@ const router = createRouter({
                     component: WorkflowView
                 },
                 {
-                    path:"/primary/test",
-                    name:"annotatortest",
-                    component: testaaa
+                    path:"/measurements-digital-twin",
+                    name:"measurements-digital-twin",
+                    component: DigitalTwinPrimaryView
                 }
             ]
         },

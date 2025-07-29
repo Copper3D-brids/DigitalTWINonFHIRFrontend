@@ -1,12 +1,12 @@
 <template>
-   <n-layout style="height: 100vh">
+   <n-layout style="height: 100dvh">
 
-    <n-layout-header bordered style="height: 8vh;">
+    <n-layout-header bordered style="height: 8dvh;">
         <app-layout-header />
     </n-layout-header>
     
 
-    <n-layout position="absolute" style="top: 8vh; bottom: 5vh" has-sider @dragover.prevent @drop="(e)=>e.preventDefault()">
+    <n-layout position="absolute" style="top: 8dvh; bottom: 5dvh" has-sider @dragover.prevent @drop="(e: MouseEvent)=>e.preventDefault()">
         
         <app-layout-sider :menu-options="menuOptions" :collapsed="true"/>
 
@@ -17,7 +17,7 @@
     </n-layout>
     <n-layout-footer
       position="absolute"
-      style="height: 5vh;"
+      style="height: 5dvh;"
       bordered
     >
       <app-layout-footer></app-layout-footer>

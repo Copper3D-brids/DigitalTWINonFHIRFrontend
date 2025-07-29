@@ -32,7 +32,6 @@
 <script setup lang="ts">
 
 import { NScrollbar, NFlex } from "naive-ui";
-import { defineProps } from 'vue';
 
 interface IData {
     title: string;

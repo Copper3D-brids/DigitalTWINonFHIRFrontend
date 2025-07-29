@@ -5,7 +5,7 @@
         </div>
          
          <div>
-            <FancyRouterCard title="Annotator for DigitalTWINS" route="AAAA" :query="customQuery"/>
+            <FancyRouterCard title="Annotator for DigitalTWINS" route="measurements-digital-twin" :query="customQuery"/>
          </div>
     </div>
 </template>

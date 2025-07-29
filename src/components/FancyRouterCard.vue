@@ -99,7 +99,8 @@ const handleCardClick = () => {
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
-  font-size: 2.5rem;
+  /* font-size: 2.5rem; */
+  font-size: clamp(14px, 2vw, 42px);
   font-weight: 600;
   letter-spacing: 2px;
   transition: 300ms ease-in-out;
@@ -113,7 +114,7 @@ const handleCardClick = () => {
   opacity: 0;
   transition: 300ms ease-in-out;
   position: absolute;
-  font-size: 28px;
+  font-size: clamp(14px, 2vw, 28px);
   font-weight: 800;
   letter-spacing: 4px;
   text-align: center;

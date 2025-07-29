@@ -1,17 +1,17 @@
 <template>
-    <n-layout class="flex flex-col bg-fancy-gradient h-screen">
+    <n-layout class="flex flex-col bg-fancy-gradient h-dvh">
         
-        <n-layout-header class="bg-transparent h-[8vh] mt-auto shadow-sm">
+        <n-layout-header class="bg-transparent h-[8dvh] mt-auto shadow-sm">
             <app-layout-header />
         </n-layout-header>
 
-        <n-layout class="flex-1 h-[87vh] bg-transparent" has-sider @dragover.prevent @drop="(e) => e.preventDefault()">
+        <n-layout class="flex-1 h-[87dvh] bg-transparent" has-sider @dragover.prevent @drop="(e:MouseEvent) => e.preventDefault()">
             <app-layout-sider v-if="root ? true : false" :menu-options="menuOptions" :width="320" />
             <n-layout :native-scrollbar="false" class="bg-transparent">
                 <router-view></router-view>
             </n-layout>
         </n-layout>
-        <n-layout-footer class="h-[5vh] mt-auto bg-transparent footer">
+        <n-layout-footer class="h-[5dvh] mt-auto bg-transparent footer">
             <app-layout-footer></app-layout-footer>
         </n-layout-footer>
     </n-layout>
@@ -55,7 +55,7 @@ const generateLable = (name: string) => {
     switch (name) {
         case 'primary':
             if (root.value?.category === 'Measurements') {
-                return () => generateRouterLabel('measurements', name, undefined, { name })
+                return () => generateRouterLabel('measurements-local', name, undefined, { name })
             } else if (root.value?.category === 'Workflow') {
                 return () => generateRouterLabel('workflow', name, undefined, { name })
             }

@@ -96,12 +96,12 @@
 import { ref, onMounted, watch, CSSProperties } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AnnotatorPageSummary from '../components/AnnotatorPageSummary.vue'
-import DatasetInfoEditor from '../components/DatasetInfoEditor.vue'
-import PatientModal from '../components/PatientModal.vue'
+import DatasetInfoEditor from '../components/localAnnotator/dataset/DatasetInfoEditor.vue'
+import PatientModal,  { IPatientFormValue } from '../components/localAnnotator/dataset/PatientModal.vue'
 import FormTab from '../components/FormTab.vue'
-import Observation from '../components/observation/Observation.vue'
-import ImagingStudy from '../components/imagingStudy/ImagingStudy.vue'
-import DocumentReference from '../components/documentReference/DocumentReference.vue'
+import Observation from '../components/localAnnotator/observation/Observation.vue'
+import ImagingStudy from '../components/localAnnotator/imagingStudy/ImagingStudy.vue'
+import DocumentReference from '../components/localAnnotator/documentReference/DocumentReference.vue'
 import { NStatistic, NCheckbox, NCheckboxGroup, NH3, NH6, NDivider, NSwitch, NButton } from 'naive-ui'
 import { useFolderPickerStore } from '@/components/composables/folderpicker'
 import { storeToRefs } from 'pinia'
@@ -111,7 +111,6 @@ import {
     IAnnotatorFormDescription,
     IAnnotatorImagingStudy
 } from '@/models'
-import { IPatientFormValue } from "../components/PatientModal.vue"
 import logo from '@/assets/images/3.png'
 
 const { root } = storeToRefs(useFolderPickerStore())
